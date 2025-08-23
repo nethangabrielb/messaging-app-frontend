@@ -1,14 +1,11 @@
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { FormProps } from "@/types/formProps";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"form">) {
+export function LoginForm({ ...props }: Readonly<FormProps>) {
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
+    <form className={"flex flex-col gap-6"}>
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Login to your account</h1>
         <p className="text-muted-foreground text-sm text-balance">
@@ -32,9 +29,12 @@ export function LoginForm({
       </div>
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
-        <a href="#" className="underline underline-offset-4">
+        <button
+          className="underline underline-offset-4"
+          onClick={() => props.setForm("register")}
+        >
           Sign up
-        </a>
+        </button>
       </div>
     </form>
   );
