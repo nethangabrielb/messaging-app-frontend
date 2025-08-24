@@ -10,7 +10,12 @@ export default function LoginPage() {
   const [form, setForm] = useState<"login" | "register">("login");
 
   // Add react-hook-form and tanstack query logic for login and registration
-  const { register, watch, reset, handleSubmit } = useForm();
+  const { register, watch, reset, getValues, handleSubmit } = useForm();
+
+  const onSubmit = () => {
+    const values = getValues();
+    console.log(values);
+  };
 
   console.log(watch());
 
@@ -28,13 +33,21 @@ export default function LoginPage() {
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
             {form === "login" ? (
-              <LoginForm setForm={setForm} register={register} reset={reset} />
+              <LoginForm
+                setForm={setForm}
+                register={register}
+                reset={reset}
+                handleSubmit={handleSubmit}
+                onSubmit={onSubmit}
+              />
             ) : (
               form === "register" && (
                 <RegisterForm
                   setForm={setForm}
                   register={register}
                   reset={reset}
+                  handleSubmit={handleSubmit}
+                  onSubmit={onSubmit}
                 ></RegisterForm>
               )
             )}
