@@ -1,12 +1,18 @@
 import { useState } from "react";
+
+import { useForm } from "react-hook-form";
 import { MessageCircle } from "lucide-react";
 
 import { LoginForm } from "@/components/forms/LoginForm";
 import { RegisterForm } from "@/components/forms/RegisterForm";
 
 export default function LoginPage() {
-  // Add react-hook-form and tanstack query logic for login and registration
   const [form, setForm] = useState<"login" | "register">("login");
+
+  // Add react-hook-form and tanstack query logic for login and registration
+  const { register, watch, reset, handleSubmit } = useForm();
+
+  console.log(watch());
 
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
@@ -22,10 +28,14 @@ export default function LoginPage() {
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
             {form === "login" ? (
-              <LoginForm setForm={setForm} />
+              <LoginForm setForm={setForm} register={register} reset={reset} />
             ) : (
               form === "register" && (
-                <RegisterForm setForm={setForm}></RegisterForm>
+                <RegisterForm
+                  setForm={setForm}
+                  register={register}
+                  reset={reset}
+                ></RegisterForm>
               )
             )}
           </div>

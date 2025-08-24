@@ -15,21 +15,42 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
       <div className="grid gap-6">
         <div className="grid gap-3">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Input
+            {...props.register("email")}
+            id="email"
+            type="email"
+            placeholder="m@example.com"
+            required
+          />
         </div>
         <div className="grid gap-3">
           <Label htmlFor="username">Username</Label>
-          <Input id="username" type="username" required />
+          <Input
+            {...props.register("username")}
+            id="username"
+            type="username"
+            required
+          />
         </div>
         <div className="grid gap-3">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" required />
+          <Input
+            {...props.register("password")}
+            id="password"
+            type="password"
+            required
+          />
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
           </div>
-          <Input id="confirmPassword" type="password" required />
+          <Input
+            {...props.register("confirmPassword")}
+            id="confirmPassword"
+            type="password"
+            required
+          />
         </div>
         <Button type="submit" className="w-full">
           Sign up
@@ -38,8 +59,11 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
       <div className="text-center text-sm">
         Already have an account?{" "}
         <button
-          className="underline underline-offset-4"
-          onClick={() => props.setForm("login")}
+          className="underline underline-offset-4 cursor-pointer"
+          onClick={() => {
+            props.setForm("login");
+            props.reset();
+          }}
         >
           Log in
         </button>
