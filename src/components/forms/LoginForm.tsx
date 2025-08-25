@@ -46,7 +46,7 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
           <div className="flex justify-between">
             <Label htmlFor="email">Email</Label>
             {errors.email && (
-              <p className="text-red-500 text-[10px] translate-y-[4px]">
+              <p className="text-red-500 text-[9px] translate-y-[4px]">
                 Email can't be empty
               </p>
             )}
@@ -64,8 +64,8 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
             {errors.password && (
-              <p className="text-red-500 text-[10px] translate-y-[4px]">
-                Password must be at least 8 characters long
+              <p className="text-red-500 text-[9px] translate-y-[4px]">
+                Password must be at least 8 characters
               </p>
             )}
           </div>
