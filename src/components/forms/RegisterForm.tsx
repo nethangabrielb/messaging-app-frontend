@@ -2,12 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import type { FormProps } from "@/types/formProps";
-
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+import type { FormProps } from "@/types/formProps";
 
 const RegistrationSchema = z
   .object({
@@ -34,10 +36,28 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
     resolver: zodResolver(RegistrationSchema),
   });
 
+  const mutation = useMutation({
+    mutationFn: (registrationInput: RegisterDetails) => {
+      return fetch(`${import.meta.env.VITE_SERVER_URL}/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(registrationInput),
+      });
+    },
+    onSuccess: async (data) => {
+      const res = await data.json();
+      if (res.status === 201) {
+        toast.success(res.message);
+        props.setForm("login");
+      }
+    },
+  });
+
   const onSubmit = () => {
     const values = getValues();
-
-    console.log(values);
+    mutation.mutate(values);
   };
 
   return (
@@ -124,8 +144,8 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
             )}
           />
         </div>
-        <Button type="submit" className="w-full">
-          Sign up
+        <Button type="submit" className="w-full" disabled={mutation.isPending}>
+          {mutation.isPending ? "Signing you up..." : "Sign up"}
         </Button>
       </div>
       <div className="text-center text-sm">
