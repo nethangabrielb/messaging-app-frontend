@@ -53,6 +53,11 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
         props.setForm("login");
       }
     },
+    onError: () => {
+      toast.error(
+        "There was an error registering your account. Please try again"
+      );
+    },
   });
 
   const onSubmit = () => {
