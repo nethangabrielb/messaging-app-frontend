@@ -46,10 +46,10 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
         body: JSON.stringify(registrationInput),
       });
     },
-    onSuccess: async (data) => {
-      const res = await data.json();
+    onSuccess: async (res) => {
+      const data = await res.json();
       if (res.status === 201) {
-        toast.success(res.message);
+        toast.success(data.message);
         props.setForm("login");
       }
     },
