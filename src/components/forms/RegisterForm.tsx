@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,18 +9,21 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 
-const RegistrationSchema = z.object({
-  email: z.email().min(1),
-  username: z.string().min(1).trim().nonempty(),
-  password: z.string().min(8),
-  confirmPassword: z.string().min(8),
-});
+const RegistrationSchema = z
+  .object({
+    email: z.email().min(1),
+    username: z.string().min(1).trim().nonempty(),
+    password: z.string().min(8),
+    confirmPassword: z.string().min(8),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 type RegisterDetails = z.infer<typeof RegistrationSchema>;
 
 export function RegisterForm({ ...props }: Readonly<FormProps>) {
-  const [passwordsEqual, setPasswordsEqual] = useState<boolean>(true);
-
   const {
     register,
     reset,
@@ -35,12 +36,6 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
 
   const onSubmit = () => {
     const values = getValues();
-
-    // Check if both passwords are not the same
-    if (values.password !== values.confirmPassword) {
-      setPasswordsEqual(false);
-      return;
-    }
 
     console.log(values);
   };
@@ -92,16 +87,10 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
         <div className="grid gap-3">
           <div className="flex justify-between">
             <Label htmlFor="password">Password</Label>
-            {errors.password ? (
+            {errors.password && (
               <p className="text-red-500 text-[9px] translate-y-[4px]">
                 Passwords must be at least 8 characters
               </p>
-            ) : (
-              !passwordsEqual && (
-                <p className="text-red-500 text-[9px] translate-y-[4px]">
-                  Passwords do not match
-                </p>
-              )
             )}
           </div>
           <Input
@@ -109,10 +98,7 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
             id="password"
             type="password"
             required
-            className={clsx(
-              errors.password ||
-                (!passwordsEqual && "border-red-500 !ring-red-500")
-            )}
+            className={clsx(errors.password && "border-red-500 !ring-red-500")}
           />
         </div>
         <div className="grid gap-3">
@@ -120,16 +106,12 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
             <Label htmlFor="confirmPassword" className="w-fit">
               Confirm Password
             </Label>
-            {errors.confirmPassword ? (
+            {errors.confirmPassword && (
               <p className="text-red-500 text-[9px] translate-y-[4px]">
-                Passwords must be at least 8 characters
+                {errors.confirmPassword.type === "custom"
+                  ? errors.confirmPassword.message
+                  : "Passwords must be at least 8 characters"}
               </p>
-            ) : (
-              !passwordsEqual && (
-                <p className="text-red-500 text-[9px] translate-y-[4px]">
-                  Passwords do not match
-                </p>
-              )
             )}
           </div>
           <Input
@@ -138,8 +120,7 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
             type="password"
             required
             className={clsx(
-              errors.confirmPassword ||
-                (!passwordsEqual && "border-red-500 !ring-red-500")
+              errors.confirmPassword && "border-red-500 !ring-red-500"
             )}
           />
         </div>
