@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +28,11 @@ const RegistrationSchema = z
 type RegisterDetails = z.infer<typeof RegistrationSchema>;
 
 export function RegisterForm({ ...props }: Readonly<FormProps>) {
+  const [emailServerErr, setEmailServerErr] = useState<string | null>(null);
+  const [usernameServerErr, setUsernameServerErr] = useState<string | null>(
+    null
+  );
+
   const {
     register,
     reset,
@@ -48,9 +55,20 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
     },
     onSuccess: async (res) => {
       const data = await res.json();
-      if (res.status === 201) {
-        toast.success(data.message);
-        props.setForm("login");
+      switch (data.status) {
+        case 201:
+          toast.success(data.message);
+          props.setForm("login");
+          break;
+        case 400: {
+          data.data.map((err: { msg: string; path: string }) => {
+            if (err.path === "email") {
+              setEmailServerErr(err.msg);
+            } else if (err.path === "username") {
+              setUsernameServerErr(err.msg);
+            }
+          });
+        }
       }
     },
     onError: () => {
@@ -82,6 +100,11 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
                 Email can't be empty
               </p>
             )}
+            {emailServerErr && (
+              <p className="text-red-500 text-[9px] translate-y-[4px]">
+                {emailServerErr}
+              </p>
+            )}
           </div>
           <Input
             {...register("email")}
@@ -89,7 +112,14 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
             type="email"
             placeholder="m@example.com"
             required
-            className={clsx(errors.email && "border-red-500 !ring-red-500")}
+            className={clsx(
+              errors.email || (emailServerErr && "border-red-500 !ring-red-500")
+            )}
+            onChange={() => {
+              if (emailServerErr) {
+                setEmailServerErr(null);
+              }
+            }}
           />
         </div>
         <div className="grid gap-3">
@@ -100,13 +130,26 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
                 Username can't be empty
               </p>
             )}
+            {usernameServerErr && (
+              <p className="text-red-500 text-[9px] translate-y-[4px]">
+                {usernameServerErr}
+              </p>
+            )}
           </div>
           <Input
             {...register("username")}
             id="username"
             type="username"
             required
-            className={clsx(errors.username && "border-red-500 !ring-red-500")}
+            className={clsx(
+              errors.username ||
+                (usernameServerErr && "border-red-500 !ring-red-500")
+            )}
+            onChange={() => {
+              if (usernameServerErr) {
+                setUsernameServerErr(null);
+              }
+            }}
           />
         </div>
         <div className="grid gap-3">
