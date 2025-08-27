@@ -57,7 +57,6 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
           setError({ error: "email", message: data.message });
           break;
         case 200:
-          console.log(data);
           localStorage.setItem("token", JSON.stringify(data.data.token));
           navigate("/home");
       }
@@ -66,7 +65,6 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
 
   const onSubmit = () => {
     const values = getValues();
-    console.log(values);
     mutation.mutate(values);
   };
 
