@@ -9,7 +9,7 @@ const router = createBrowserRouter([
     element: <LoginPage></LoginPage>,
   },
   {
-    path: "/home",
+    path: "/chat",
     loader: protectedLoader,
     element: (
       <Layout>

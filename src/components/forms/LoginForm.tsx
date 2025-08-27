@@ -58,7 +58,7 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
           break;
         case 200:
           localStorage.setItem("token", JSON.stringify(data.data.token));
-          navigate("/home");
+          navigate("/chat");
       }
     },
   });
