@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -6,16 +8,22 @@ import type { FormProps } from "@/types/formProps";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
-
-type LoginDetails = z.infer<typeof LoginSchema>;
 
 const LoginSchema = z.object({
   email: z.email().min(1),
   password: z.string().min(8),
 });
 
+type LoginDetails = z.infer<typeof LoginSchema>;
+
 export function LoginForm({ ...props }: Readonly<FormProps>) {
+  const [error, setError] = useState<{ error: string; message: string }>({
+    error: "",
+    message: "",
+  });
+
   const {
     register,
     reset,
@@ -26,12 +34,33 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
     resolver: zodResolver(LoginSchema),
   });
 
+  const mutation = useMutation({
+    mutationFn: (loginInput: LoginDetails) => {
+      return fetch(`${import.meta.env.VITE_SERVER_URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginInput),
+      });
+    },
+    onSuccess: async (res) => {
+      const data = await res.json();
+
+      if (data.status === 401) {
+        setError({ error: "password", message: data.message });
+      } else if (data.status === 404) {
+        setError({ error: "email", message: data.message });
+      }
+      console.log(data);
+    },
+  });
+
   const onSubmit = () => {
     const values = getValues();
     console.log(values);
+    mutation.mutate(values);
   };
-
-  console.log(errors);
 
   return (
     <form className={"flex flex-col gap-6"} onSubmit={handleSubmit(onSubmit)}>
@@ -50,6 +79,11 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
                 Email can't be empty
               </p>
             )}
+            {error.error === "email" && (
+              <p className="text-red-500 text-[9px] translate-y-[4px]">
+                {error.message}
+              </p>
+            )}
           </div>
           <Input
             {...register("email")}
@@ -57,7 +91,17 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
             type="email"
             placeholder="m@example.com"
             required
-            className={clsx(errors.email && "border-red-500 !ring-red-500")}
+            className={clsx(
+              errors.email ||
+                (error.error === "email" && "border-red-500 !ring-red-500")
+            )}
+            // Add an onChange listener here to remove error if
+            // user is typing and finished typing
+            onChange={() => {
+              if (error.error === "email") {
+                setError({ error: "", message: "" });
+              }
+            }}
           />
         </div>
         <div className="grid gap-3">
@@ -68,17 +112,32 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
                 Password must be at least 8 characters
               </p>
             )}
+            {error.error === "password" && (
+              <p className="text-red-500 text-[9px] translate-y-[4px]">
+                {error.message}
+              </p>
+            )}
           </div>
           <Input
             {...register("password")}
             id="password"
             type="password"
             required
-            className={clsx(errors.password && "border-red-500 !ring-red-500")}
+            className={clsx(
+              errors.password ||
+                (error.error === "password" && "border-red-500 !ring-red-500")
+            )}
+            // Same here, we add an onChange listener here to remove error if
+            // user is typing and finished typing
+            onChange={() => {
+              if (error.error === "password") {
+                setError({ error: "", message: "" });
+              }
+            }}
           />
         </div>
-        <Button type="submit" className="w-full">
-          Login
+        <Button type="submit" className="w-full" disabled={mutation.isPending}>
+          {mutation.isPending ? "Logging in..." : "Login"}
         </Button>
       </div>
       <div className="text-center text-sm">
