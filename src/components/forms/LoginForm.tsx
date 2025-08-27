@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +24,7 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
     error: "",
     message: "",
   });
+  const navigate = useNavigate();
 
   const {
     register,
@@ -47,12 +49,18 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
     onSuccess: async (res) => {
       const data = await res.json();
 
-      if (data.status === 401) {
-        setError({ error: "password", message: data.message });
-      } else if (data.status === 404) {
-        setError({ error: "email", message: data.message });
+      switch (data.status) {
+        case 401:
+          setError({ error: "password", message: data.message });
+          break;
+        case 404:
+          setError({ error: "email", message: data.message });
+          break;
+        case 200:
+          console.log(data);
+          localStorage.setItem("token", JSON.stringify(data.data.token));
+          navigate("/home");
       }
-      console.log(data);
     },
   });
 
