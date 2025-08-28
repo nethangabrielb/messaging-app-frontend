@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     loader: protectedLoader,
     element: (
       <Layout>
-        <div>Home</div>
+        <div className="col-start-2 col-end-3 row-start-2 p-2">Home</div>
       </Layout>
     ),
   },
