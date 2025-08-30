@@ -9,7 +9,7 @@ const People = () => {
     queryKey: ["users"],
     queryFn: async () => {
       const token = JSON.parse(localStorage.getItem("token") as string);
-      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/users`, {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/users`, {
         headers: {
           authorization: `Bearer ${token}`,
         },

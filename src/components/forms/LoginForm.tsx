@@ -38,7 +38,7 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
 
   const mutation = useMutation({
     mutationFn: (loginInput: LoginDetails) => {
-      return fetch(`${import.meta.env.VITE_SERVER_URL}/login`, {
+      return fetch(`${import.meta.env.VITE_SERVER_URL}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -45,7 +45,7 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
 
   const mutation = useMutation({
     mutationFn: (registrationInput: RegisterDetails) => {
-      return fetch(`${import.meta.env.VITE_SERVER_URL}/register`, {
+      return fetch(`${import.meta.env.VITE_SERVER_URL}/api/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

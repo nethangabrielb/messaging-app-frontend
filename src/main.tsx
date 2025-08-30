@@ -11,7 +11,7 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Toaster position="top-center" richColors />
+      <Toaster position="top-right" richColors />
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <App />
       </ThemeProvider>
