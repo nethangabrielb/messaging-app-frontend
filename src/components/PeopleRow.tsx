@@ -35,7 +35,7 @@ const PeopleRow = ({ user }: Props) => {
   };
 
   return (
-    <section className="flex justify-between items-center w-full p-4 border-border border rounded-lg">
+    <section className="flex justify-between items-center p-4 border-border border rounded-lg w-[80%]">
       <div>
         <h1 className="text-foreground text-[14px] font-light w-[100px]">
           {user.username}
