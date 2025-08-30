@@ -4,6 +4,15 @@ import { Button } from "@/components/ui/button";
 import { io } from "socket.io-client";
 import { toast } from "sonner";
 
+interface Acknowledgement {
+  success: boolean;
+  message: string;
+  room: {
+    id: number;
+    name: string;
+  };
+}
+
 const PeopleRow = ({ user }: Props) => {
   const statusClasses = clsx(
     "w-[8px] h-[8px] rounded-full",
@@ -26,9 +35,13 @@ const PeopleRow = ({ user }: Props) => {
       "create room",
       token,
       buttonEvent.id,
-      (res: { success: boolean }) => {
+      (res: Acknowledgement) => {
         if (res.success) {
-          toast.success("Chatroom created successfully!");
+          if (res.message) {
+            toast.success(res.message);
+          }
+        } else {
+          toast.error(res.message);
         }
       }
     );
