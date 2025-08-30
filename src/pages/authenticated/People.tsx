@@ -19,13 +19,11 @@ const People = () => {
     },
   });
 
-  console.log(data?.data);
-
   return (
-    <main className="flex flex-col items-center col-start-2 col-end-3 row-start-2 p-2 border border-border bg-card rounded-md gap-4">
+    <main className="flex flex-col items-center col-start-2 col-end-3 row-start-2 p-2 border border-border bg-card rounded-md gap-4 h-full">
       <Input
         type="search"
-        className="w-[50%]"
+        className="w-[50%] mb-8"
         placeholder="Search someone..."
       ></Input>
 
