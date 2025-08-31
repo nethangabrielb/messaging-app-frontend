@@ -59,7 +59,7 @@ const PeopleRow = ({ user }: Props) => {
       <div className="flex items-center gap-2 self-center mx-auto">
         <div className={statusClasses}></div>
         <p className="font-light text-xs">
-          {!user.status ? "Offline" : user.status}
+          {!user.status ? "OFFLINE" : user.status}
         </p>
       </div>
 
