@@ -2,7 +2,9 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "@/layouts/Layout";
 import LoginPage from "@/pages/guest/Auth";
 import protectedLoader from "@/lib/protectedLoader";
+
 import People from "@/pages/authenticated/People";
+import Chats from "@/pages/authenticated/Chats";
 
 const router = createBrowserRouter([
   {
@@ -14,9 +16,16 @@ const router = createBrowserRouter([
     loader: protectedLoader,
     element: (
       <Layout>
-        <div className="col-start-2 col-end-3 row-start-2 p-2 border border-border bg-card rounded-md">
-          Home
-        </div>
+        <Chats></Chats>
+      </Layout>
+    ),
+  },
+  {
+    path: "/chat/:room",
+    loader: protectedLoader,
+    element: (
+      <Layout>
+        <Chats></Chats>
       </Layout>
     ),
   },

@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { useQuery } from "@tanstack/react-query";
 import type { User } from "@/types/user";
-import PeopleRow from "@/components/PeopleRow";
+import PeopleRow from "@/components/people/PeopleRow";
 
 const People = () => {
   // Upon mounting component, query all people
