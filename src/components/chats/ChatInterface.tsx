@@ -14,6 +14,15 @@ const ChatInterface = ({ room }: ChatRoom) => {
   const [messages, setMessages] = useState<Array<string>>([]);
   const { register, getValues, watch, resetField } = useForm();
   const token = JSON.parse(localStorage.getItem("token") as string);
+  const socket = io(import.meta.env.VITE_SERVER_URL);
+
+  socket.on("connect", () => {
+    console.log(socket.id);
+  });
+
+  socket.on("message", (message) => {
+    console.log(message);
+  });
 
   const { data: chatMessages } = useQuery({
     queryKey: [room],
@@ -32,8 +41,6 @@ const ChatInterface = ({ room }: ChatRoom) => {
       return fetchData(url);
     },
   });
-
-  const socket = io(import.meta.env.VITE_SERVER_URL);
 
   const sendMessage = (e: React.MouseEvent<HTMLFormElement>) => {
     const message = getValues("message");
@@ -54,8 +61,8 @@ const ChatInterface = ({ room }: ChatRoom) => {
   };
 
   return (
-    <div className="flex flex-col justify-between w-full">
-      <div className="flex flex-col justify-end items-end h-full px-10 gap-2">
+    <div className="flex flex-col justify-end w-full max-h-[827px]">
+      <div className="flex flex-col items-end px-10 gap-2  overflow-y-auto">
         {/* Render backend chat history here */}
         {chatMessages?.data.map((message: MessageInterface) => {
           return (
@@ -90,7 +97,7 @@ const ChatInterface = ({ room }: ChatRoom) => {
 
       {/* Send message input interface */}
       <form
-        className="flex justify-center items-center gap-1 w-full p-4"
+        className="flex justify-center items-center gap-1 w-full p-4 static"
         onSubmit={sendMessage}
       >
         <Input
@@ -98,6 +105,7 @@ const ChatInterface = ({ room }: ChatRoom) => {
           type="text"
           className="w-[100%] rounded-full"
           placeholder="Aa"
+          autoComplete="off"
         ></Input>
         <button
           className={clsx(

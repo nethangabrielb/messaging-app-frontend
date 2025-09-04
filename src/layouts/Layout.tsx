@@ -15,7 +15,7 @@ const Layout = ({ children }: ReactProps) => {
   };
 
   return (
-    <main className="grid grid-cols-[1fr_1024px_1fr] grid-rows-[38px_1fr] p-4 gap-8 h-full">
+    <main className="grid grid-cols-[1fr_1024px_1fr] grid-rows-[38px_1fr] p-4 gap-8 h-full max-h-full">
       <header className="flex justify-between items-center h-fit p-3 col-start-2 col-end-3 row-start-1 row-end-2 border-border border bg-card rounded-md">
         <nav className="flex list-none gap-4">
           <NavLink to="/chat">Chats</NavLink>

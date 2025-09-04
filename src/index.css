@@ -6,11 +6,11 @@
 body {
   margin: 0;
   min-width: 320px;
-  min-height: 100svh;
+  height: 100svh;
 }
 
 #root {
-  height: 100svh;
+  height: 100%;
 }
 
 button {
