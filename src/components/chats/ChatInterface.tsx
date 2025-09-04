@@ -8,6 +8,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import Message from "@/components/chats/Message";
 import { useForm } from "react-hook-form";
+import type { MessageInterface } from "@/types/messages";
 
 const ChatInterface = ({ room }: ChatRoom) => {
   const [messages, setMessages] = useState<Array<string>>([]);
@@ -44,7 +45,7 @@ const ChatInterface = ({ room }: ChatRoom) => {
       room,
       (res: { success: boolean }) => {
         if (res.success) {
-          alert("Message sent success!");
+          console.log("message sent");
         }
       }
     );
@@ -54,13 +55,35 @@ const ChatInterface = ({ room }: ChatRoom) => {
 
   return (
     <div className="flex flex-col justify-between w-full">
-      {/* Render backend chat history here */}
-
-      {/* Render newly sent messages here */}
       <div className="flex flex-col justify-end items-end h-full px-10 gap-2">
+        {/* Render backend chat history here */}
+        {chatMessages?.data.map((message: MessageInterface) => {
+          return (
+            <Message
+              message={message}
+              userId={user?.data[0].id}
+              key={crypto.randomUUID()}
+            ></Message>
+          );
+        })}
+        {/* 
+          Render newly sent messages here and the reason why
+          why I did not render the Message component below is because
+          the purpose of it is to just render immediate feedback when sending a message
+          while it is not saved in the database.
+
+          For the above, we use the Message component as we will be using information such as senderId
+        */}
         {messages.map((message) => {
           return (
-            <Message message={message} key={crypto.randomUUID()}></Message>
+            <div
+              className={clsx(
+                "border border-border bg-secondary rounded-lg p-2 px-3 w-fit font-light text-[14px]"
+              )}
+              key={crypto.randomUUID()}
+            >
+              {message}
+            </div>
           );
         })}
       </div>

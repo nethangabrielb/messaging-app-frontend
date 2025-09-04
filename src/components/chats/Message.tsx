@@ -1,17 +1,20 @@
 import clsx from "clsx";
+import type { MessageInterface } from "@/types/messages";
 
 type Props = {
-  message: string;
+  message: MessageInterface;
+  userId: number;
 };
 
-const Message = ({ message }: Props) => {
+const Message = ({ message, userId }: Props) => {
   return (
     <div
       className={clsx(
-        "border border-border bg-secondary rounded-lg p-2 px-3 w-fit font-light text-[14px]"
+        "border border-border bg-secondary rounded-lg p-2 px-3 w-fit font-light text-[14px]",
+        userId !== message.senderId ? "self-start" : "self-end"
       )}
     >
-      {message}
+      {message.message}
     </div>
   );
 };
