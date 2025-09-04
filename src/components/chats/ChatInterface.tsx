@@ -62,7 +62,7 @@ const ChatInterface = ({ room }: ChatRoom) => {
 
   return (
     <div className="flex flex-col justify-end w-full max-h-[827px]">
-      <div className="flex flex-col items-end px-10 gap-2  overflow-y-auto">
+      <div className="flex flex-col items-end px-10 gap-2 overflow-y-auto">
         {/* Render backend chat history here */}
         {chatMessages?.data.map((message: MessageInterface) => {
           return (
