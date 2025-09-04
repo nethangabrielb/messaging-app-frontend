@@ -7,10 +7,11 @@ import { io } from "socket.io-client";
 import { useState } from "react";
 import clsx from "clsx";
 import Message from "@/components/chats/Message";
+import { useForm } from "react-hook-form";
 
 const ChatInterface = ({ room }: ChatRoom) => {
-  const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<Array<string>>([]);
+  const { register, getValues, watch, resetField } = useForm();
   const token = JSON.parse(localStorage.getItem("token") as string);
 
   const { data: chatMessages } = useQuery({
@@ -31,11 +32,10 @@ const ChatInterface = ({ room }: ChatRoom) => {
     },
   });
 
-  console.log(user);
-
   const socket = io(import.meta.env.VITE_SERVER_URL);
 
   const sendMessage = (e: React.MouseEvent<HTMLFormElement>) => {
+    const message = getValues("message");
     e.preventDefault();
     socket.emit(
       "message",
@@ -49,7 +49,7 @@ const ChatInterface = ({ room }: ChatRoom) => {
       }
     );
     setMessages([...messages, message]);
-    setMessage("");
+    resetField("message");
   };
 
   return (
@@ -71,22 +71,21 @@ const ChatInterface = ({ room }: ChatRoom) => {
         onSubmit={sendMessage}
       >
         <Input
+          {...register("message")}
           type="text"
           className="w-[100%] rounded-full"
           placeholder="Aa"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
         ></Input>
         <button
           className={clsx(
             "p-2 rounded-full !cursor-default",
-            message !== "" && "hover:bg-neutral-800 !cursor-pointer"
+            watch("message") !== "" && "hover:bg-neutral-800 !cursor-pointer"
           )}
           type="submit"
-          disabled={message === ""}
+          disabled={watch("message") === ""}
         >
           <SendHorizontal
-            className={clsx(message === "" && "stroke-neutral-500")}
+            className={clsx(watch("message") === "" && "stroke-neutral-500")}
           ></SendHorizontal>
         </button>
       </form>
