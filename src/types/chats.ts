@@ -10,6 +10,7 @@ interface ChatOverview {
 
 type Chat = {
   chat: ChatOverview;
+  room: string | undefined;
 };
 
 export type { ChatOverview, Chat };

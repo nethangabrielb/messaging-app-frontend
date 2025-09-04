@@ -27,9 +27,9 @@ const Chats = () => {
 
   return (
     <main className="flex col-start-2 col-end-3 row-start-2 border border-border bg-card rounded-md h-full">
-      <aside className="w-[30%] p-2 border-r border-r-border">
+      <aside className="w-[30%] p-2 border-r border-r-border flex flex-col gap-2">
         {userChats?.data?.map((chat: ChatOverview) => {
-          return <ChatRow key={chat.id} chat={chat}></ChatRow>;
+          return <ChatRow key={chat.id} chat={chat} room={room}></ChatRow>;
         })}
       </aside>
     </main>

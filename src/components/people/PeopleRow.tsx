@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { Button } from "@/components/ui/button";
 import { io } from "socket.io-client";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 interface Acknowledgement {
   success: boolean;
@@ -14,6 +15,8 @@ interface Acknowledgement {
 }
 
 const PeopleRow = ({ user }: Props) => {
+  const navigate = useNavigate();
+
   const statusClasses = clsx(
     "w-[8px] h-[8px] rounded-full",
     user.status === "OFFLINE" && "bg-neutral-500",
@@ -40,6 +43,7 @@ const PeopleRow = ({ user }: Props) => {
           if (res.message) {
             toast.success(res.message);
           }
+          navigate(`/chat/${res.room.name}`);
         } else {
           toast.error(res.message);
         }
