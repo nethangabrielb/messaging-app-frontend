@@ -43,6 +43,7 @@ const PeopleRow = ({ user }: Props) => {
           if (res.message) {
             toast.success(res.message);
           }
+          socket.disconnect();
           navigate(`/chat/${res.room.name}`);
         } else {
           toast.error(res.message);
