@@ -6,19 +6,32 @@ import fetchData from "@/lib/fetchData";
 import { io } from "socket.io-client";
 import { useState } from "react";
 import clsx from "clsx";
+import Message from "@/components/chats/Message";
 
 const ChatInterface = ({ room }: ChatRoom) => {
   const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<Array<string>>([]);
   const token = JSON.parse(localStorage.getItem("token") as string);
 
-  const { data } = useQuery({
+  const { data: chatMessages } = useQuery({
     queryKey: [room],
     queryFn: async () => {
       const url = `${import.meta.env.VITE_SERVER_URL}/api/messages/${room}`;
       return fetchData(url);
     },
   });
+
+  const { data: user } = useQuery({
+    queryKey: [token],
+    queryFn: async () => {
+      const url = `${
+        import.meta.env.VITE_SERVER_URL
+      }/api/users?tokenHolder=true`;
+      return fetchData(url);
+    },
+  });
+
+  console.log(user);
 
   const socket = io(import.meta.env.VITE_SERVER_URL);
 
@@ -35,23 +48,19 @@ const ChatInterface = ({ room }: ChatRoom) => {
         }
       }
     );
-
     setMessages([...messages, message]);
     setMessage("");
   };
 
   return (
     <div className="flex flex-col justify-between w-full">
-      {/* Render messages here */}
+      {/* Render backend chat history here */}
+
+      {/* Render newly sent messages here */}
       <div className="flex flex-col justify-end items-end h-full px-10 gap-2">
         {messages.map((message) => {
           return (
-            <div
-              className="border border-border bg-secondary rounded-lg p-2 px-3 w-fit font-light text-[14px]"
-              key={crypto.randomUUID()}
-            >
-              {message}
-            </div>
+            <Message message={message} key={crypto.randomUUID()}></Message>
           );
         })}
       </div>
