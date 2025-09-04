@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import ChatRow from "@/components/chats/ChatRow";
 import type { ChatOverview } from "@/types/chats";
 import fetchData from "@/lib/fetchData";
+import ChatInterface from "@/components/chats/ChatInterface";
 
 const Chats = () => {
   const { room } = useParams();
@@ -32,6 +33,7 @@ const Chats = () => {
           return <ChatRow key={chat.id} chat={chat} room={room}></ChatRow>;
         })}
       </aside>
+      {room && <ChatInterface room={room}></ChatInterface>}
     </main>
   );
 };

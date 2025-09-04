@@ -13,4 +13,8 @@ type Chat = {
   room: string | undefined;
 };
 
-export type { ChatOverview, Chat };
+type ChatRoom = {
+  room: string;
+};
+
+export type { ChatOverview, Chat, ChatRoom };
