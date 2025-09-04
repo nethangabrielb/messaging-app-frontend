@@ -4,7 +4,7 @@ import { SendHorizontal } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import fetchData from "@/lib/fetchData";
 import { io } from "socket.io-client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 import Message from "@/components/chats/Message";
 import { useForm } from "react-hook-form";
@@ -15,14 +15,6 @@ const ChatInterface = ({ room }: ChatRoom) => {
   const { register, getValues, watch, resetField } = useForm();
   const token = JSON.parse(localStorage.getItem("token") as string);
   const socket = io(import.meta.env.VITE_SERVER_URL);
-
-  socket.on("connect", () => {
-    console.log(socket.id);
-  });
-
-  socket.on("message", (message) => {
-    console.log(message);
-  });
 
   const { data: chatMessages } = useQuery({
     queryKey: [room],
@@ -41,6 +33,14 @@ const ChatInterface = ({ room }: ChatRoom) => {
       return fetchData(url);
     },
   });
+
+  useEffect(() => {
+    socket.emit("join room", room);
+
+    socket.on("message", (message) => {
+      console.log(message);
+    });
+  }, [room]);
 
   const sendMessage = (e: React.MouseEvent<HTMLFormElement>) => {
     const message = getValues("message");
