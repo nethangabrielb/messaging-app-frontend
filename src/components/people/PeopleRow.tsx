@@ -1,9 +1,9 @@
 import type { Props } from "@/types/user";
 import clsx from "clsx";
 import { Button } from "@/components/ui/button";
-import { io } from "socket.io-client";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { socket } from "../../socket";
 
 interface Acknowledgement {
   success: boolean;
@@ -27,7 +27,6 @@ const PeopleRow = ({ user }: Props) => {
 
   const chatHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const buttonEvent = e.target as HTMLButtonElement;
-    const socket = io(import.meta.env.VITE_SERVER_URL);
 
     // Get token from LocalStorage to get current user data
     const token = JSON.parse(localStorage.getItem("token") as string);
@@ -39,11 +38,8 @@ const PeopleRow = ({ user }: Props) => {
       token,
       buttonEvent.id,
       (res: Acknowledgement) => {
+        console.log(res);
         if (res.success) {
-          if (res.message) {
-            toast.success(res.message);
-          }
-          socket.disconnect();
           navigate(`/chat/${res.room.name}`);
         } else {
           toast.error(res.message);
