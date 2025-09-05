@@ -3,9 +3,21 @@ import { ModeToggle } from "@/components/ModeToggle";
 import { Button } from "@/components/ui/button";
 import { NavLink, useNavigate } from "react-router-dom";
 import { socket } from "../socket";
+import { useEffect } from "react";
+import protectedLoader from "@/lib/protectedLoader";
 
 const Layout = ({ children }: ReactProps) => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const isAuthenticated = protectedLoader();
+
+    if (isAuthenticated) {
+      window.addEventListener("load", () => {
+        socket.connect();
+      });
+    }
+  }, []);
 
   const logoutHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
