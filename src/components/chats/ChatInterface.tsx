@@ -4,7 +4,7 @@ import { SendHorizontal } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import fetchData from "@/lib/fetchData";
 import { io } from "socket.io-client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import clsx from "clsx";
 import Message from "@/components/chats/Message";
 import { useForm } from "react-hook-form";
@@ -12,6 +12,7 @@ import type { MessageInterface } from "@/types/messages";
 
 const ChatInterface = ({ room }: ChatRoom) => {
   const [messages, setMessages] = useState<Array<string>>([]);
+  const messagesEndRef = useRef<null | HTMLDivElement>(null);
   const { register, getValues, watch, resetField } = useForm();
   const token = JSON.parse(localStorage.getItem("token") as string);
   const socket = io(import.meta.env.VITE_SERVER_URL);
@@ -41,6 +42,13 @@ const ChatInterface = ({ room }: ChatRoom) => {
       console.log(message);
     });
   }, [room]);
+
+  useEffect(() => {
+    console.log("rerendered!");
+    requestAnimationFrame(() => {
+      messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
+    });
+  }, [room, messages]);
 
   const sendMessage = (e: React.MouseEvent<HTMLFormElement>) => {
     const message = getValues("message");
@@ -101,6 +109,7 @@ const ChatInterface = ({ room }: ChatRoom) => {
             </div>
           );
         })}
+        <div ref={messagesEndRef}></div>
       </div>
 
       {/* Send message input interface */}
