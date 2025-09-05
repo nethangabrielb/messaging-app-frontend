@@ -7,11 +7,22 @@ import ChatInterface from "@/components/chats/ChatInterface";
 
 const Chats = () => {
   const { room } = useParams();
+  const token = JSON.parse(localStorage.getItem("token") as string);
 
   const { data: userChats } = useQuery({
     queryKey: ["chats"],
     queryFn: async () => {
       const url = `${import.meta.env.VITE_SERVER_URL}/api/chats`;
+      return fetchData(url);
+    },
+  });
+
+  const { data: user } = useQuery({
+    queryKey: [token],
+    queryFn: async () => {
+      const url = `${
+        import.meta.env.VITE_SERVER_URL
+      }/api/users?tokenHolder=true`;
       return fetchData(url);
     },
   });
@@ -23,7 +34,13 @@ const Chats = () => {
           return <ChatRow key={chat.id} chat={chat} room={room}></ChatRow>;
         })}
       </aside>
-      {room && <ChatInterface room={room}></ChatInterface>}
+      {room && (
+        <ChatInterface
+          room={room}
+          user={user?.data[0]}
+          token={token}
+        ></ChatInterface>
+      )}
     </main>
   );
 };

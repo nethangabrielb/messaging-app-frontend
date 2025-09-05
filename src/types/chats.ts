@@ -1,3 +1,5 @@
+import type { User } from "@/types/user";
+
 // interface for overview of chats in chats row
 interface ChatOverview {
   id: number;
@@ -18,6 +20,8 @@ type Chat = {
 // type for room name
 type ChatRoom = {
   room: string;
+  user: User;
+  token: string;
 };
 
 export type { ChatOverview, Chat, ChatRoom };

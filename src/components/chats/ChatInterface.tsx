@@ -10,11 +10,12 @@ import Message from "@/components/chats/Message";
 import { useForm } from "react-hook-form";
 import type { MessageInterface } from "@/types/messages";
 
-const ChatInterface = ({ room }: ChatRoom) => {
-  const [messages, setMessages] = useState<Array<string>>([]);
+const ChatInterface = ({ room, user, token }: ChatRoom) => {
+  const [messages, setMessages] = useState<
+    Array<{ message: string; id: number }>
+  >([]);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   const { register, getValues, watch, resetField } = useForm();
-  const token = JSON.parse(localStorage.getItem("token") as string);
   const socket = io(import.meta.env.VITE_SERVER_URL);
 
   const { data: chatMessages } = useQuery({
@@ -25,26 +26,26 @@ const ChatInterface = ({ room }: ChatRoom) => {
     },
   });
 
-  const { data: user } = useQuery({
-    queryKey: [token],
-    queryFn: async () => {
-      const url = `${
-        import.meta.env.VITE_SERVER_URL
-      }/api/users?tokenHolder=true`;
-      return fetchData(url);
-    },
-  });
-
   useEffect(() => {
+    console.log("MESSAGES in UseEffect FN:");
+    console.log(messages);
     socket.emit("join room", room);
 
-    socket.on("message", (message) => {
-      console.log(message);
+    socket.on("message", (message, senderData) => {
+      setMessages([...messages, { message, id: senderData.id }]);
     });
+
+    setMessages([]);
+
+    return () => {
+      socket.disconnect();
+    };
   }, [room]);
 
   useEffect(() => {
-    console.log("rerendered!");
+    window.addEventListener("DOMContentLoaded", () => {
+      messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
+    });
     requestAnimationFrame(() => {
       messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
     });
@@ -53,6 +54,9 @@ const ChatInterface = ({ room }: ChatRoom) => {
   const sendMessage = (e: React.MouseEvent<HTMLFormElement>) => {
     const message = getValues("message");
     e.preventDefault();
+    console.log("MESSAGES in SendMessage FN:");
+    console.log(message);
+    console.log(messages);
     socket.emit(
       "message",
       message,
@@ -62,11 +66,13 @@ const ChatInterface = ({ room }: ChatRoom) => {
         if (res.success) {
           console.log("message sent");
         }
+        setMessages([...messages, { message, id: user.id }]);
       }
     );
-    setMessages([...messages, message]);
     resetField("message");
   };
+
+  console.log(messages);
 
   return (
     <div className="flex flex-col justify-end w-full max-h-[827px]">
@@ -84,11 +90,12 @@ const ChatInterface = ({ room }: ChatRoom) => {
           return (
             <Message
               message={message}
-              userId={user?.data[0].id}
+              userId={user?.id}
               key={crypto.randomUUID()}
             ></Message>
           );
         })}
+
         {/* 
           Render newly sent messages here and the reason why
           why I did not render the Message component below is because
@@ -101,11 +108,12 @@ const ChatInterface = ({ room }: ChatRoom) => {
           return (
             <div
               className={clsx(
-                "border border-border bg-secondary rounded-lg p-2 px-3 w-fit font-light text-[14px]"
+                "border border-border bg-secondary rounded-lg p-2 px-3 w-fit font-light text-[14px]",
+                message.id !== user?.id ? "self-start" : "self-end"
               )}
               key={crypto.randomUUID()}
             >
-              {message}
+              {message.message}
             </div>
           );
         })}
