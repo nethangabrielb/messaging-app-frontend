@@ -16,16 +16,6 @@ const Chats = () => {
     },
   });
 
-  const { data: chatRoom } = useQuery({
-    queryKey: [room],
-    queryFn: async () => {
-      if (room) {
-        const url = `${import.meta.env.VITE_SERVER_URL}/api/messages/${room}`;
-        return fetchData(url);
-      }
-    },
-  });
-
   return (
     <main className="flex col-start-2 col-end-3 row-start-2 border border-border bg-card rounded-md max-h-full">
       <aside className="w-[30%] p-2 border-r border-r-border flex flex-col gap-2">
