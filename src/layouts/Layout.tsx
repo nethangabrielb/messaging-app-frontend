@@ -12,11 +12,11 @@ const Layout = ({ children }: ReactProps) => {
   useEffect(() => {
     const isAuthenticated = protectedLoader();
 
-    if (isAuthenticated) {
-      window.addEventListener("load", () => {
+    window.addEventListener("load", () => {
+      if (isAuthenticated) {
         socket.connect();
-      });
-    }
+      }
+    });
   }, []);
 
   const logoutHandler = (e: React.MouseEvent<HTMLButtonElement>) => {

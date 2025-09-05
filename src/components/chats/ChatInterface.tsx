@@ -57,7 +57,6 @@ const ChatInterface = ({ room, user, token }: ChatRoom) => {
 
   const sendMessage = (e: React.MouseEvent<HTMLFormElement>) => {
     const message = getValues("message");
-    console.log(message);
     e.preventDefault();
     socket.emit(
       "message",
