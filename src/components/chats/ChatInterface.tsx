@@ -3,12 +3,13 @@ import { Input } from "@/components/ui/input";
 import { SendHorizontal } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import fetchData from "@/lib/fetchData";
-import { io } from "socket.io-client";
 import { useEffect, useState, useRef } from "react";
 import clsx from "clsx";
 import Message from "@/components/chats/Message";
 import { useForm } from "react-hook-form";
 import type { MessageInterface } from "@/types/messages";
+import type { User } from "@/types/user";
+import { socket } from "../../socket";
 
 const ChatInterface = ({ room, user, token }: ChatRoom) => {
   const [messages, setMessages] = useState<
@@ -16,7 +17,6 @@ const ChatInterface = ({ room, user, token }: ChatRoom) => {
   >([]);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   const { register, getValues, watch, resetField } = useForm();
-  const socket = io(import.meta.env.VITE_SERVER_URL);
 
   const { data: chatMessages } = useQuery({
     queryKey: [room],
@@ -27,25 +27,29 @@ const ChatInterface = ({ room, user, token }: ChatRoom) => {
   });
 
   useEffect(() => {
-    console.log("MESSAGES in UseEffect FN:");
-    console.log(messages);
-    socket.emit("join room", room);
+    const messageHandler = (message: string, sender: User) => {
+      setMessages([...messages, { message, id: sender.id }]);
+    };
 
-    socket.on("message", (message, senderData) => {
-      setMessages([...messages, { message, id: senderData.id }]);
-    });
-
-    setMessages([]);
+    socket.on("message", messageHandler);
 
     return () => {
-      socket.disconnect();
+      socket.off("message", messageHandler);
     };
+  }, [messages]);
+
+  useEffect(() => {
+    socket.emit("join room", room);
+    setMessages([]);
   }, [room]);
 
   useEffect(() => {
-    window.addEventListener("DOMContentLoaded", () => {
+    window.addEventListener("load", () => {
       messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
     });
+  }, []);
+
+  useEffect(() => {
     requestAnimationFrame(() => {
       messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
     });
@@ -53,10 +57,8 @@ const ChatInterface = ({ room, user, token }: ChatRoom) => {
 
   const sendMessage = (e: React.MouseEvent<HTMLFormElement>) => {
     const message = getValues("message");
-    e.preventDefault();
-    console.log("MESSAGES in SendMessage FN:");
     console.log(message);
-    console.log(messages);
+    e.preventDefault();
     socket.emit(
       "message",
       message,
@@ -71,8 +73,6 @@ const ChatInterface = ({ room, user, token }: ChatRoom) => {
     );
     resetField("message");
   };
-
-  console.log(messages);
 
   return (
     <div className="flex flex-col justify-end w-full max-h-[827px]">
