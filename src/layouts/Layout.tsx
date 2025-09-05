@@ -2,6 +2,7 @@ import type { ReactProps } from "@/types/reactNode";
 import { ModeToggle } from "@/components/ModeToggle";
 import { Button } from "@/components/ui/button";
 import { NavLink, useNavigate } from "react-router-dom";
+import { socket } from "../socket";
 
 const Layout = ({ children }: ReactProps) => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const Layout = ({ children }: ReactProps) => {
     // Delete token then navigate back home
     localStorage.removeItem("token");
     navigate("/");
+    socket.disconnect();
   };
 
   return (

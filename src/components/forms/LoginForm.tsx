@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
+import { socket } from "../../socket";
 
 const LoginSchema = z.object({
   email: z.email().min(1),
@@ -59,6 +60,7 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
         case 200:
           localStorage.setItem("token", JSON.stringify(data.data.token));
           navigate("/chat");
+          socket.connect();
       }
     },
   });
