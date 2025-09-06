@@ -38,7 +38,7 @@ const ChangeStatus = ({ user, refetch }: Props) => {
   }
 
   const valueChangeHandler = (value: string) => {
-    socket.emit("set online", token, value, (res: { success: true }) => {
+    socket.emit("set status", token, value, (res: { success: true }) => {
       if (res.success) {
         refetch();
       }

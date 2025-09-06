@@ -11,6 +11,7 @@ import ChangeStatus from "@/layouts/ChangeStatus";
 const Layout = ({ children }: ReactProps) => {
   const navigate = useNavigate();
   const { user, refetchUser } = useUser();
+  const token = JSON.parse(localStorage.getItem("token") as string);
 
   useEffect(() => {
     const isAuthenticated = protectedLoader();
@@ -26,7 +27,11 @@ const Layout = ({ children }: ReactProps) => {
     e.preventDefault();
 
     // Delete token then navigate back home
-    socket.disconnect();
+    socket.emit("set status", token, "OFFLINE", (res: { success: true }) => {
+      if (res.success) {
+        socket.disconnect();
+      }
+    });
     localStorage.removeItem("token");
     navigate("/");
   };

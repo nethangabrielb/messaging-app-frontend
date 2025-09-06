@@ -27,7 +27,7 @@ const People = () => {
         refetch();
       }
     };
-    socket.on("set online", refetchUsers);
+    socket.on("set status", refetchUsers);
   }, []);
 
   return (
