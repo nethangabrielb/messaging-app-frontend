@@ -4,25 +4,17 @@ import ChatRow from "@/components/chats/ChatRow";
 import type { ChatOverview } from "@/types/chats";
 import fetchData from "@/lib/fetchData";
 import ChatInterface from "@/components/chats/ChatInterface";
+import useUser from "@/layouts/useUser";
 
 const Chats = () => {
   const { room } = useParams();
   const token = JSON.parse(localStorage.getItem("token") as string);
+  const { user } = useUser();
 
   const { data: userChats } = useQuery({
     queryKey: ["chats"],
     queryFn: async () => {
       const url = `${import.meta.env.VITE_SERVER_URL}/api/chats`;
-      return fetchData(url);
-    },
-  });
-
-  const { data: user } = useQuery({
-    queryKey: [token],
-    queryFn: async () => {
-      const url = `${
-        import.meta.env.VITE_SERVER_URL
-      }/api/users?tokenHolder=true`;
       return fetchData(url);
     },
   });
