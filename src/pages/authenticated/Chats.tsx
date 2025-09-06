@@ -4,7 +4,7 @@ import ChatRow from "@/components/chats/ChatRow";
 import type { ChatOverview } from "@/types/chats";
 import fetchData from "@/lib/fetchData";
 import ChatInterface from "@/components/chats/ChatInterface";
-import useUser from "@/layouts/useUser";
+import useUser from "@/hooks/useUser";
 
 const Chats = () => {
   const { room } = useParams();

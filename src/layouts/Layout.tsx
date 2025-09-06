@@ -1,13 +1,15 @@
 import type { ReactProps } from "@/types/reactNode";
 import { ModeToggle } from "@/components/ModeToggle";
-import { Button } from "@/components/ui/button";
 import { NavLink, useNavigate } from "react-router-dom";
 import { socket } from "../socket";
 import { useEffect } from "react";
 import protectedLoader from "@/lib/protectedLoader";
+import useUser from "@/hooks/useUser";
+import { HeaderDropdown } from "@/layouts/HeaderDropdown";
 
 const Layout = ({ children }: ReactProps) => {
   const navigate = useNavigate();
+  const { user } = useUser();
 
   useEffect(() => {
     const isAuthenticated = protectedLoader();
@@ -19,7 +21,7 @@ const Layout = ({ children }: ReactProps) => {
     });
   }, []);
 
-  const logoutHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const logoutHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
 
     // Delete token then navigate back home
@@ -35,9 +37,13 @@ const Layout = ({ children }: ReactProps) => {
           <NavLink to="/chat">Chats</NavLink>
           <NavLink to="/people">People</NavLink>
         </nav>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3 ">
           <ModeToggle></ModeToggle>
-          <Button onClick={logoutHandler}>Logout</Button>
+          <HeaderDropdown
+            user={user?.data[0]}
+            logoutHandler={logoutHandler}
+          ></HeaderDropdown>
+          {/* <Button onClick={logoutHandler}>Logout</Button> */}
         </div>
       </header>
       {children}
