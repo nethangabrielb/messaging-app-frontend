@@ -61,7 +61,7 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
           localStorage.setItem("token", JSON.stringify(data.data.token));
           navigate("/chat");
           socket.connect();
-          socket.emit("set online", data.data.token);
+          socket.emit("set online", data.data.token, "ONLINE");
       }
     },
   });

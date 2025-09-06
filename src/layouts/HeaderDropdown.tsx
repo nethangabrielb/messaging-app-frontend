@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-
+import Status from "@/components/Status";
 import type { User } from "@/types/user";
 
 type Props = Readonly<{
@@ -34,12 +34,7 @@ export function HeaderDropdown({ user, logoutHandler }: Props) {
         <DropdownMenuGroup>
           <DropdownMenuLabel className="flex justify-between">
             {user?.username}
-            <div className="flex items-center gap-2">
-              <p className="font-light text-xs">
-                {!user.status ? "OFFLINE" : user.status}
-              </p>
-              <div className={statusClasses}></div>
-            </div>
+            <Status user={user} statusClasses={statusClasses}></Status>
           </DropdownMenuLabel>
           <DropdownMenuItem>Profile</DropdownMenuItem>
         </DropdownMenuGroup>

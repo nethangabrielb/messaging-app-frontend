@@ -6,10 +6,11 @@ import { useEffect } from "react";
 import protectedLoader from "@/lib/protectedLoader";
 import useUser from "@/hooks/useUser";
 import { HeaderDropdown } from "@/layouts/HeaderDropdown";
+import ChangeStatus from "@/layouts/ChangeStatus";
 
 const Layout = ({ children }: ReactProps) => {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, refetchUser } = useUser();
 
   useEffect(() => {
     const isAuthenticated = protectedLoader();
@@ -38,12 +39,15 @@ const Layout = ({ children }: ReactProps) => {
           <NavLink to="/people">People</NavLink>
         </nav>
         <div className="flex items-center gap-3 ">
+          <ChangeStatus
+            user={user?.data[0]}
+            refetch={refetchUser}
+          ></ChangeStatus>
           <ModeToggle></ModeToggle>
           <HeaderDropdown
             user={user?.data[0]}
             logoutHandler={logoutHandler}
           ></HeaderDropdown>
-          {/* <Button onClick={logoutHandler}>Logout</Button> */}
         </div>
       </header>
       {children}

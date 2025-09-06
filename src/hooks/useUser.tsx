@@ -3,7 +3,7 @@ import fetchData from "@/lib/fetchData";
 
 const useUser = () => {
   const token = JSON.parse(localStorage.getItem("token") as string);
-  const { data: user } = useQuery({
+  const { data: user, refetch: refetchUser } = useQuery({
     queryKey: [token],
     queryFn: async () => {
       const url = `${
@@ -13,7 +13,7 @@ const useUser = () => {
     },
   });
 
-  return { user };
+  return { user, refetchUser };
 };
 
 export default useUser;
