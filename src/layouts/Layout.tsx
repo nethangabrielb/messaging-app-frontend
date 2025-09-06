@@ -26,9 +26,9 @@ const Layout = ({ children }: ReactProps) => {
     e.preventDefault();
 
     // Delete token then navigate back home
+    socket.disconnect();
     localStorage.removeItem("token");
     navigate("/");
-    socket.disconnect();
   };
 
   return (

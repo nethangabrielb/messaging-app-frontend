@@ -38,7 +38,6 @@ const PeopleRow = ({ user }: Props) => {
       token,
       buttonEvent.id,
       (res: Acknowledgement) => {
-        console.log(res);
         if (res.success) {
           navigate(`/chat/${res.room.name}`);
         } else {

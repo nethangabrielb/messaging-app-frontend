@@ -23,7 +23,6 @@ const People = () => {
 
   useEffect(() => {
     const refetchUsers = (shouldRefetch: { refetch: boolean }) => {
-      console.log("refetched!");
       if (shouldRefetch.refetch) {
         refetch();
       }
