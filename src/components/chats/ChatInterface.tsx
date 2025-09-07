@@ -45,7 +45,9 @@ const ChatInterface = ({ room, user, token }: ChatRoom) => {
 
   useEffect(() => {
     window.addEventListener("load", () => {
-      messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => {
+        messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     });
   }, []);
 
