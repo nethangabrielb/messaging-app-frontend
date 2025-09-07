@@ -1,14 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ChatRow from "@/components/chats/ChatRow";
 import type { ChatOverview } from "@/types/chats";
 import fetchData from "@/lib/fetchData";
 import ChatInterface from "@/components/chats/ChatInterface";
 import useUser from "@/hooks/useUser";
+import { useEffect } from "react";
 
 const Chats = () => {
   const { room } = useParams();
   const { user } = useUser();
+  const navigate = useNavigate();
   const token = JSON.parse(localStorage.getItem("token") as string);
 
   const { data: userChats } = useQuery({
@@ -18,6 +20,12 @@ const Chats = () => {
       return fetchData(url);
     },
   });
+
+  useEffect(() => {
+    if (userChats?.data.length >= 1) {
+      navigate(`/chat/${userChats?.data[0].name}`);
+    }
+  }, [userChats?.data, navigate]);
 
   return (
     <main className="flex col-start-2 col-end-3 row-start-2 border border-border bg-card rounded-md max-h-full">
