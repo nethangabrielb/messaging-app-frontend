@@ -74,15 +74,15 @@ const ChatInterface = ({ room, user, token }: ChatRoom) => {
   };
 
   return (
-    <div className="flex flex-col justify-end w-full max-h-[827px]">
+    <div className="flex flex-col justify-end w-full max-h-[850px]">
       <div
         className="flex flex-col items-end px-10 gap-2 overflow-y-auto  [&::-webkit-scrollbar]:w-2
   [&::-webkit-scrollbar-track]:rounded-full
   [&::-webkit-scrollbar-track]:bg-gray-100
   [&::-webkit-scrollbar-thumb]:rounded-full
   [&::-webkit-scrollbar-thumb]:bg-gray-300
-  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 mt-2"
+  dark:[&::-webkit-scrollbar-track]:bg-transparent
+  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-600 mt-2"
       >
         {/* Render backend chat history here */}
         {chatMessages?.data.map((message: MessageInterface) => {
@@ -121,7 +121,7 @@ const ChatInterface = ({ room, user, token }: ChatRoom) => {
 
       {/* Send message input interface */}
       <form
-        className="flex justify-center items-center gap-1 w-full p-4 static"
+        className="flex justify-center items-center gap-1 w-full p-4 translate-y-4 static"
         onSubmit={sendMessage}
       >
         <Input

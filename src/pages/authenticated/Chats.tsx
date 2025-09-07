@@ -8,8 +8,8 @@ import useUser from "@/hooks/useUser";
 
 const Chats = () => {
   const { room } = useParams();
-  const token = JSON.parse(localStorage.getItem("token") as string);
   const { user } = useUser();
+  const token = JSON.parse(localStorage.getItem("token") as string);
 
   const { data: userChats } = useQuery({
     queryKey: ["chats"],

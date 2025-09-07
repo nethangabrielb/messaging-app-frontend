@@ -19,6 +19,7 @@ const Layout = ({ children }: ReactProps) => {
     window.addEventListener("load", () => {
       if (isAuthenticated) {
         socket.connect();
+        refetchUser();
       }
     });
   }, []);
