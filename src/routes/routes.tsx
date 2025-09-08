@@ -6,6 +6,8 @@ import protectedLoader from "@/lib/protectedLoader";
 import People from "@/pages/authenticated/People";
 import Chats from "@/pages/authenticated/Chats";
 import Settings from "@/pages/authenticated/Settings";
+import Profile from "@/components/settings/Profile";
+import Account from "@/components/settings/Account";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +49,16 @@ const router = createBrowserRouter([
         <Settings></Settings>
       </Layout>
     ),
+    children: [
+      {
+        index: true,
+        element: <Profile></Profile>,
+      },
+      {
+        path: "Account",
+        element: <Account></Account>,
+      },
+    ],
   },
 ]);
 
