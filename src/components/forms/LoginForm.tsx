@@ -59,7 +59,6 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
           break;
         case 200:
           localStorage.setItem("token", JSON.stringify(data.data.token));
-          navigate("/chat");
           socket.connect();
           socket.emit(
             "set status",
@@ -67,7 +66,7 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
             "ONLINE",
             (res: { success: true }) => {
               if (res.success) {
-                console.log(res);
+                navigate("/chat");
               }
             }
           );

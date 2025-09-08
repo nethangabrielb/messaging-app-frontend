@@ -23,7 +23,6 @@ const People = () => {
       } else if (search) {
         url = `${url}?search=${search}`;
       }
-      console.log(url);
       const res = await fetch(url, {
         headers: {
           authorization: `Bearer ${token}`,
