@@ -76,7 +76,7 @@ const ChatInterface = ({ room, user, token }: ChatRoom) => {
   };
 
   return (
-    <div className="flex flex-col justify-end w-full max-h-[850px]">
+    <div className="flex flex-col justify-end w-full max-h-[820px]">
       <div
         className="flex flex-col items-end px-10 gap-2 overflow-y-auto  [&::-webkit-scrollbar]:w-2
   [&::-webkit-scrollbar-track]:rounded-full
