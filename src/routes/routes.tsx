@@ -5,7 +5,7 @@ import protectedLoader from "@/lib/protectedLoader";
 
 import People from "@/pages/authenticated/People";
 import Chats from "@/pages/authenticated/Chats";
-import Settings from "@/pages/authenticated/Settings";
+import AccountSettings from "@/pages/authenticated/Settings";
 import Profile from "@/components/settings/Profile";
 import Account from "@/components/settings/Account";
 
@@ -46,7 +46,7 @@ const router = createBrowserRouter([
     loader: protectedLoader,
     element: (
       <Layout>
-        <Settings></Settings>
+        <AccountSettings></AccountSettings>
       </Layout>
     ),
     children: [
@@ -55,7 +55,7 @@ const router = createBrowserRouter([
         element: <Profile></Profile>,
       },
       {
-        path: "Account",
+        path: "account",
         element: <Account></Account>,
       },
     ],
