@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Status from "@/components/Status";
 import type { User } from "@/types/user";
+import { useNavigate } from "react-router-dom";
 
 type Props = Readonly<{
   user: User;
@@ -18,6 +19,7 @@ type Props = Readonly<{
 }>;
 
 export function HeaderDropdown({ user, logoutHandler }: Props) {
+  const navigate = useNavigate();
   const statusClasses = clsx(
     "w-[8px] h-[8px] rounded-full",
     user?.status === "OFFLINE" && "bg-neutral-500",
@@ -36,7 +38,9 @@ export function HeaderDropdown({ user, logoutHandler }: Props) {
             {user?.username}
             <Status user={user} statusClasses={statusClasses}></Status>
           </DropdownMenuLabel>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => navigate("/settings")}>
+            Profile
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
 
