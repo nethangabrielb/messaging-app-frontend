@@ -1,4 +1,3 @@
-import { CircleUserRound } from "lucide-react";
 import clsx from "clsx";
 import {
   DropdownMenu,
@@ -27,10 +26,17 @@ export function HeaderDropdown({ user, logoutHandler }: Props) {
     user?.status === "BUSY" && "bg-red-500",
     user?.status === null && "bg-neutral-500"
   );
+
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <CircleUserRound className="stroke-foreground cursor-pointer stroke-1"></CircleUserRound>
+      <DropdownMenuTrigger
+        asChild
+        className="h-full w-[32px] rounded-full cursor-pointer select-none"
+      >
+        <img
+          src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${user?.avatar}`}
+          alt="user avatar"
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-40">
         <DropdownMenuGroup>
