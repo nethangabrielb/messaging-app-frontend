@@ -29,8 +29,8 @@ const Profile = () => {
   const { user } = useUser();
 
   return (
-    <form className="flex gap-4">
-      <div className="flex flex-col p-4 gap-4">
+    <form className="flex justify-around w-full gap-4 p-4 ">
+      <div className="flex flex-col gap-4">
         <ProfileInputRow
           label="Username"
           value={user?.data[0].username}
@@ -43,7 +43,15 @@ const Profile = () => {
         ></ProfileInputRow>
         <Button className="w-fit">Update profile</Button>
       </div>
-      <div></div>
+
+      <div className="flex flex-col items-center gap-2">
+        <img
+          src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${user?.data[0].avatar}`}
+          alt="user avatar"
+          className="w-[150px] h-auto rounded-full object-contain"
+        />
+        <p className="font-light text-sm">Profile avatar</p>
+      </div>
     </form>
   );
 };
