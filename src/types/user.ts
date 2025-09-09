@@ -7,6 +7,7 @@ interface User {
   status?: string;
   updatedAt: Date;
   username: string;
+  avatar: true;
 }
 
 type Props = {

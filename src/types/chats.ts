@@ -7,6 +7,7 @@ interface ChatOverview {
   users: [
     {
       username: string;
+      avatar: string;
     }
   ];
 }
