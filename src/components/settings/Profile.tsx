@@ -9,6 +9,7 @@ import clsx from "clsx";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 const ProfileSchema = z.object({
   username: z
@@ -18,6 +19,9 @@ const ProfileSchema = z.object({
       message: "Username can't be empty",
     }),
   bio: z.string().nullable(),
+  file: z.file().refine((file) => file.size <= 2097152, {
+    error: "Avatar must be 2MB or smaller.",
+  }),
 });
 
 type Profile = z.infer<typeof ProfileSchema>;
@@ -25,7 +29,7 @@ type Profile = z.infer<typeof ProfileSchema>;
 const Profile = () => {
   const { user } = useUser();
   const [hover, setHover] = useState<boolean>(false);
-  const [file, setFile] = useState<File | null>(null);
+  const [filePreview, setFilePreview] = useState<File | null>(null);
   const editAvatarBtn = useRef<SVGSVGElement | null>(null);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
   const {
@@ -38,6 +42,7 @@ const Profile = () => {
     defaultValues: {
       username: user?.data[0]?.username,
       bio: user?.data[0]?.bio,
+      file: undefined,
     },
     resolver: zodResolver(ProfileSchema),
   });
@@ -54,7 +59,12 @@ const Profile = () => {
 
   const uploadAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFile(e.target.files[0]);
+      if (e.target.files[0].size <= 2097152) {
+        setValue("file", e.target.files[0], { shouldValidate: true });
+        setFilePreview(e.target.files[0]);
+      } else {
+        toast.error("Avatar must be 2MB or smaller.");
+      }
     }
   };
 
@@ -62,7 +72,7 @@ const Profile = () => {
     const values = getValues();
   };
 
-  console.log(errors);
+  console.log(getValues());
 
   return (
     <form
@@ -105,8 +115,8 @@ const Profile = () => {
         >
           <img
             src={`${
-              file
-                ? URL.createObjectURL(file)
+              filePreview
+                ? URL.createObjectURL(filePreview)
                 : `${import.meta.env.VITE_R2_PUBLIC_URL}/${
                     user?.data[0].avatar
                   }`
