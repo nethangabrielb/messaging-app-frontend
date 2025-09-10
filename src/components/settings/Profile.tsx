@@ -7,6 +7,15 @@ import { Pencil } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const ProfileSchema = z.object({
+  username: z.string().min(1, { message: "Username can't be empty" }),
+  bio: z.string().nullable(),
+});
+
+type Profile = z.infer<typeof ProfileSchema>;
 
 const Profile = () => {
   const { user } = useUser();
@@ -14,11 +23,18 @@ const Profile = () => {
   const [file, setFile] = useState<File | null>(null);
   const editAvatarBtn = useRef<SVGSVGElement | null>(null);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
-  const { watch, getValues, setValue, register, handleSubmit } = useForm({
+  const {
+    getValues,
+    setValue,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Profile>({
     defaultValues: {
       username: user?.data[0]?.username,
       bio: user?.data[0]?.bio,
     },
+    resolver: zodResolver(ProfileSchema),
   });
 
   useEffect(() => {
@@ -39,8 +55,8 @@ const Profile = () => {
 
   const onSubmit = () => {
     const values = getValues();
-    console.log(values);
   };
+
   return (
     <form
       className="flex justify-around w-full gap-4 p-4"
@@ -54,6 +70,11 @@ const Profile = () => {
             {...register("username")}
             // value={user?.data[0].username}
           ></Input>
+          {errors.username && (
+            <p className="text-red-500 text-[9px] translate-y-[4px] translate-x-[4px]">
+              {errors.username.message}
+            </p>
+          )}
         </div>
         <div className="flex flex-col gap-1">
           <Label className="font-extralight ml-1 text-sm">Bio</Label>
