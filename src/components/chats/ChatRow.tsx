@@ -20,7 +20,7 @@ const ChatRow = ({ chat, room }: Chat) => {
       <img
         src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${chat?.users[0]?.avatar}`}
         alt="user avatar"
-        className="object-contain w-[32px] rounded-full"
+        className="object-cover w-[38px] h-[38px]  rounded-full"
       />
       <h1>{chat.users[0].username}</h1>
     </button>

@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
 
 const ProfileSchema = z.object({
   username: z
@@ -19,9 +20,12 @@ const ProfileSchema = z.object({
       message: "Username can't be empty",
     }),
   bio: z.string().nullable(),
-  file: z.file().refine((file) => file.size <= 2097152, {
-    error: "Avatar must be 2MB or smaller.",
-  }),
+  file: z
+    .file()
+    .refine((file) => file.size <= 2097152, {
+      error: "Avatar must be 2MB or smaller.",
+    })
+    .optional(),
 });
 
 type Profile = z.infer<typeof ProfileSchema>;
@@ -46,6 +50,38 @@ const Profile = () => {
     },
     resolver: zodResolver(ProfileSchema),
   });
+  const mutator = useMutation({
+    mutationFn: () => {
+      const values = getValues();
+      const formData = new FormData();
+      console.log(values);
+
+      formData.append("username", values.username.toString());
+      formData.append("bio", values.bio?.toString() ?? "");
+      formData.append("file", values.file ?? "");
+
+      return fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/users/${user?.data[0]?.id}`,
+        {
+          method: "PUT",
+          headers: {
+            authorization: `Bearer ${JSON.parse(
+              localStorage.getItem("token") as string
+            )}`,
+          },
+          body: formData,
+        }
+      );
+    },
+    onSuccess: async (res) => {
+      if (res.ok) {
+        const data = await res.json();
+        toast.success(data.message);
+      } else {
+        toast.error("Something went wrong. Please try again!");
+      }
+    },
+  });
 
   useEffect(() => {
     setValue("username", user?.data[0]?.username);
@@ -69,10 +105,8 @@ const Profile = () => {
   };
 
   const onSubmit = () => {
-    const values = getValues();
+    mutator.mutate();
   };
-
-  console.log(getValues());
 
   return (
     <form
@@ -101,7 +135,10 @@ const Profile = () => {
             {...register("bio")}
           ></Textarea>
         </div>
-        <Button className="w-fit" disabled={Object.keys(errors).length >= 1}>
+        <Button
+          className="w-fit"
+          disabled={(errors.username && true) || mutator.isPending}
+        >
           Update profile
         </Button>
       </div>

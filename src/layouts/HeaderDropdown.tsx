@@ -31,11 +31,12 @@ export function HeaderDropdown({ user, logoutHandler }: Props) {
     <DropdownMenu>
       <DropdownMenuTrigger
         asChild
-        className="h-full w-[32px] rounded-full cursor-pointer select-none"
+        className="h-[34px] w-[34px] rounded-full cursor-pointer select-none object-cover"
       >
         <img
           src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${user?.avatar}`}
           alt="user avatar"
+          className="object-contain"
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-40">
