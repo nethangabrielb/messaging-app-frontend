@@ -4,29 +4,9 @@ import useUser from "@/hooks/useUser";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
-
-const ProfileInputRow = ({
-  label,
-  value,
-  bio,
-}: {
-  label: string;
-  value: string;
-  bio: boolean;
-}) => {
-  return (
-    <div className="flex flex-col gap-1">
-      <Label className="font-extralight ml-1 text-sm">{label}</Label>
-      {!bio ? (
-        <Input value={value} className="font-light"></Input>
-      ) : (
-        <Textarea value={value} className="font-light"></Textarea>
-      )}
-    </div>
-  );
-};
+import { useForm } from "react-hook-form";
 
 const Profile = () => {
   const { user } = useUser();
@@ -34,6 +14,17 @@ const Profile = () => {
   const [file, setFile] = useState<File | null>(null);
   const editAvatarBtn = useRef<SVGSVGElement | null>(null);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
+  const { watch, getValues, setValue, register, handleSubmit } = useForm({
+    defaultValues: {
+      username: user?.data[0]?.username,
+      bio: user?.data[0]?.bio,
+    },
+  });
+
+  useEffect(() => {
+    setValue("username", user?.data[0]?.username);
+    setValue("bio", user?.data[0]?.bio);
+  }, [user]);
 
   const avatarUploadHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -46,19 +37,32 @@ const Profile = () => {
     }
   };
 
+  const onSubmit = () => {
+    const values = getValues();
+    console.log(values);
+  };
   return (
-    <form className="flex justify-around w-full gap-4 p-4 ">
-      <div className="flex flex-col gap-4">
-        <ProfileInputRow
-          label="Username"
-          value={user?.data[0].username}
-          bio={false}
-        ></ProfileInputRow>
-        <ProfileInputRow
-          label="Bio"
-          value={user?.data[0].bio}
-          bio={true}
-        ></ProfileInputRow>
+    <form
+      className="flex justify-around w-full gap-4 p-4"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <div className="flex flex-col gap-4 max-w-full">
+        <div className="flex flex-col gap-1">
+          <Label className="font-extralight ml-1 text-sm">Username</Label>
+          <Input
+            className="font-light"
+            {...register("username")}
+            // value={user?.data[0].username}
+          ></Input>
+        </div>
+        <div className="flex flex-col gap-1">
+          <Label className="font-extralight ml-1 text-sm">Bio</Label>
+          <Textarea
+            // value={user?.data[0].bio}
+            className="font-light w-[234px]"
+            {...register("bio")}
+          ></Textarea>
+        </div>
         <Button className="w-fit">Update profile</Button>
       </div>
 
@@ -89,7 +93,7 @@ const Profile = () => {
           ></Pencil>
         </button>
         <p className="font-light text-sm">Profile avatar</p>
-        <input
+        <Input
           type="file"
           name="avatar"
           id="avatar"
