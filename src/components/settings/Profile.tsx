@@ -11,7 +11,12 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const ProfileSchema = z.object({
-  username: z.string().min(1, { message: "Username can't be empty" }),
+  username: z
+    .string()
+    .min(1, { message: "Username can't be empty" })
+    .refine((val) => val.trim().length >= 1, {
+      message: "Username can't be empty",
+    }),
   bio: z.string().nullable(),
 });
 
@@ -57,6 +62,8 @@ const Profile = () => {
     const values = getValues();
   };
 
+  console.log(errors);
+
   return (
     <form
       className="flex justify-around w-full gap-4 p-4"
@@ -84,7 +91,9 @@ const Profile = () => {
             {...register("bio")}
           ></Textarea>
         </div>
-        <Button className="w-fit">Update profile</Button>
+        <Button className="w-fit" disabled={Object.keys(errors).length >= 1}>
+          Update profile
+        </Button>
       </div>
 
       <div className="flex flex-col items-center gap-2">
