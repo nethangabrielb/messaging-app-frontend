@@ -1,4 +1,4 @@
-import type { ChatRoom } from "@/types/chats";
+import type { ChatRoom, EndUser } from "@/types/chats";
 import { Input } from "@/components/ui/input";
 import { SendHorizontal } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -11,12 +11,13 @@ import type { MessageInterface } from "@/types/messages";
 import type { User } from "@/types/user";
 import { socket } from "../../socket";
 
-const ChatInterface = ({ room, user, token }: ChatRoom) => {
+const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
   const [messages, setMessages] = useState<
     Array<{ message: string; id: number }>
   >([]);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   const { register, getValues, watch, resetField } = useForm();
+  const [endUser, setEndUser] = useState<EndUser | null>(null);
 
   const { data: chatMessages } = useQuery({
     queryKey: [room],
@@ -25,6 +26,23 @@ const ChatInterface = ({ room, user, token }: ChatRoom) => {
       return fetchData(url);
     },
   });
+
+  const statusClasses = clsx(
+    "w-[8px] h-[8px] rounded-full",
+    endUser?.status === "OFFLINE" && "bg-neutral-500",
+    endUser?.status === "ONLINE" && "bg-green-500",
+    endUser?.status === "BUSY" && "bg-red-500",
+    endUser?.status === null && "bg-neutral-500"
+  );
+
+  useEffect(() => {
+    const endUserValue = userChats?.filter((chats) => {
+      return chats.name === room;
+    });
+    if (endUserValue) {
+      setEndUser(endUserValue[0].users[0]);
+    }
+  }, [room, userChats]);
 
   useEffect(() => {
     const messageHandler = (message: string, sender: User) => {
@@ -75,8 +93,26 @@ const ChatInterface = ({ room, user, token }: ChatRoom) => {
     resetField("message");
   };
 
+  console.log(endUser);
+
   return (
     <div className="flex flex-col justify-end w-full max-h-[820px]">
+      <div className="flex items-center gap-2 bg-secondary p-4 rounded-tr-lg w-full top-0 mb-auto">
+        <img
+          src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${endUser?.avatar}`}
+          alt="user avatar"
+          className="object-cover w-[38px] h-[38px]  rounded-full"
+        />
+        <div className="flex flex-col">
+          <p className="text-[16px] font-light">{endUser?.username}</p>
+          <div className="flex items-center gap-1">
+            <div className={statusClasses}></div>
+            <p className="font-thin text-xs">
+              {!endUser?.status ? "OFFLINE" : endUser?.status}
+            </p>
+          </div>
+        </div>
+      </div>
       <div
         className="flex flex-col items-end px-10 gap-2 overflow-y-auto  [&::-webkit-scrollbar]:w-2
   [&::-webkit-scrollbar-track]:rounded-full

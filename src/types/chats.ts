@@ -12,6 +12,19 @@ interface ChatOverview {
   ];
 }
 
+interface EndUser {
+  avatar: string;
+  status: string | null;
+  username: string;
+}
+
+// interface for user chats with room and users associated to room information
+interface UserChats {
+  id: number;
+  name: string;
+  users: Array<EndUser>;
+}
+
 // type props for chatrow component
 type Chat = {
   chat: ChatOverview;
@@ -23,6 +36,7 @@ type ChatRoom = {
   room: string;
   user: User;
   token: string;
+  userChats: Array<UserChats>;
 };
 
-export type { ChatOverview, Chat, ChatRoom };
+export type { ChatOverview, Chat, ChatRoom, UserChats, EndUser };
