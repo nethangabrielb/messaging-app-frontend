@@ -27,7 +27,7 @@ const AccountSettings = () => {
           to={"/settings/account"}
         >
           <Settings></Settings>
-          <p>Account</p>
+          <p>Password</p>
         </NavLink>
       </aside>
       {/* Content of the sidebar selection should be here */}

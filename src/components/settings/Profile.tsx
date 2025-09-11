@@ -20,6 +20,12 @@ const ProfileSchema = z.object({
       message: "Username can't be empty",
     }),
   bio: z.string().nullable(),
+  email: z
+    .email()
+    .min(1, { message: "Email can't be empty" })
+    .refine((val) => val.trim().length >= 1, {
+      message: "Username can't be empty",
+    }),
   file: z
     .file()
     .refine((file) => file.size <= 2097152, {
@@ -54,7 +60,6 @@ const Profile = () => {
     mutationFn: () => {
       const values = getValues();
       const formData = new FormData();
-      console.log(values);
 
       formData.append("username", values.username.toString());
       formData.append("bio", values.bio?.toString() ?? "");
@@ -86,6 +91,7 @@ const Profile = () => {
   useEffect(() => {
     setValue("username", user?.data[0]?.username);
     setValue("bio", user?.data[0]?.bio);
+    setValue("email", user?.data[0]?.email);
   }, [user]);
 
   const avatarUploadHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -116,11 +122,7 @@ const Profile = () => {
       <div className="flex flex-col gap-4 max-w-full">
         <div className="flex flex-col gap-1">
           <Label className="font-extralight ml-1 text-sm">Username</Label>
-          <Input
-            className="font-light"
-            {...register("username")}
-            // value={user?.data[0].username}
-          ></Input>
+          <Input className="font-light" {...register("username")}></Input>
           {errors.username && (
             <p className="text-red-500 text-[9px] translate-y-[4px] translate-x-[4px]">
               {errors.username.message}
@@ -128,9 +130,17 @@ const Profile = () => {
           )}
         </div>
         <div className="flex flex-col gap-1">
+          <Label className="font-extralight ml-1 text-sm">Email</Label>
+          <Input className="font-light" {...register("email")}></Input>
+          {errors.email && (
+            <p className="text-red-500 text-[9px] translate-y-[4px] translate-x-[4px]">
+              {errors.email.message}
+            </p>
+          )}
+        </div>
+        <div className="flex flex-col gap-1">
           <Label className="font-extralight ml-1 text-sm">Bio</Label>
           <Textarea
-            // value={user?.data[0].bio}
             className="font-light w-[234px]"
             {...register("bio")}
           ></Textarea>

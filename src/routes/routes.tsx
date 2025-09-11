@@ -7,7 +7,7 @@ import People from "@/pages/authenticated/People";
 import Chats from "@/pages/authenticated/Chats";
 import AccountSettings from "@/pages/authenticated/Settings";
 import Profile from "@/components/settings/Profile";
-import Account from "@/components/settings/Account";
+import Password from "@/components/settings/Password";
 
 const router = createBrowserRouter([
   {
@@ -56,7 +56,7 @@ const router = createBrowserRouter([
       },
       {
         path: "account",
-        element: <Account></Account>,
+        element: <Password></Password>,
       },
     ],
   },
