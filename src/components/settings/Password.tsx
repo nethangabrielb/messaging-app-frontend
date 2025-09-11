@@ -78,6 +78,11 @@ const Password = () => {
         setServerError(null);
       }
     },
+    onError: () => {
+      toast.error(
+        "There is an unexpected error in the server. Please try again!"
+      );
+    },
   });
 
   const onSubmit = () => {
