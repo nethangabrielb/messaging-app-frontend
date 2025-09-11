@@ -6,6 +6,7 @@ import fetchData from "@/lib/fetchData";
 import ChatInterface from "@/components/chats/ChatInterface";
 import useUser from "@/hooks/useUser";
 import { useEffect } from "react";
+import { socket } from "../../socket";
 
 const Chats = () => {
   const { room } = useParams();
@@ -27,10 +28,8 @@ const Chats = () => {
     }
   }, [userChats?.data, navigate]);
 
-  console.log(userChats);
-
   return (
-    <main className="flex col-start-2 col-end-3 row-start-2 border border-border bg-card rounded-md max-h-full">
+    <main className="flex col-start-2 col-end-3 row-start-2 border border-border bg-card rounded-sm max-h-full">
       <aside className="w-[30%] p-2 border-r border-r-border flex flex-col gap-2">
         {userChats?.data?.map((chat: ChatOverview) => {
           return <ChatRow key={chat.id} chat={chat} room={room}></ChatRow>;

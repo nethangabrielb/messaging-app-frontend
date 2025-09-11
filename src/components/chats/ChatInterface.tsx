@@ -93,17 +93,15 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
     resetField("message");
   };
 
-  console.log(endUser);
-
   return (
-    <div className="flex flex-col justify-end w-full max-h-[820px]">
-      <div className="flex items-center gap-2 bg-secondary p-4 rounded-tr-lg w-full top-0 mb-auto">
+    <div className="flex flex-col justify-end w-full max-h-[764px]">
+      <div className="flex items-center gap-2 bg-secondary p-3 rounded-tr-lg w-full top-0 mb-auto border border-b-border border-t-0 border-l-0 border-r-0">
         <img
           src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${endUser?.avatar}`}
           alt="user avatar"
           className="object-cover w-[38px] h-[38px]  rounded-full"
         />
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-1">
           <p className="text-[16px] font-light">{endUser?.username}</p>
           <div className="flex items-center gap-1">
             <div className={statusClasses}></div>
@@ -159,7 +157,7 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
 
       {/* Send message input interface */}
       <form
-        className="flex justify-center items-center gap-1 w-full p-4 translate-y-4 static"
+        className="flex justify-center items-center gap-1 w-full p-2 static"
         onSubmit={sendMessage}
       >
         <Input

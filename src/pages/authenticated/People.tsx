@@ -43,7 +43,7 @@ const People = () => {
   }, []);
 
   return (
-    <main className="flex flex-col items-center col-start-2 col-end-3 row-start-2 p-2 border border-border bg-card rounded-md gap-4 h-full">
+    <main className="flex flex-col items-center col-start-2 col-end-3 row-start-2 p-2 border border-border bg-card rounded-sm gap-4 h-full">
       <div className="flex gap-2 mb-10 mt-5 w-[50%]">
         <Input
           type="search"

@@ -6,7 +6,7 @@ const AccountSettings = () => {
   const location = useLocation();
 
   return (
-    <main className="flex col-start-2 col-end-3 row-start-2 border border-border bg-card rounded-md max-h-full">
+    <main className="flex col-start-2 col-end-3 row-start-2 border border-border bg-card rounded-sm max-h-full">
       {/* Sidebar should be here */}
       <aside className="w-[30%] p-2 border-r border-r-border flex flex-col gap-2">
         <NavLink

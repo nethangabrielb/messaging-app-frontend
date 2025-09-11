@@ -22,7 +22,7 @@ const ChatRow = ({ chat, room }: Chat) => {
         alt="user avatar"
         className="object-cover w-[38px] h-[38px]  rounded-full"
       />
-      <h1>{chat.users[0].username}</h1>
+      <h1 className="font-light text-[14px]">{chat.users[0].username}</h1>
     </button>
   );
 };
