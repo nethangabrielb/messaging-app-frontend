@@ -49,16 +49,20 @@ const PeopleRow = ({ user }: Props) => {
 
   return (
     <section className="flex justify-between items-center p-4 border-border border rounded-lg w-[80%]">
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-4 items-center">
         <img
           src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${user.avatar}`}
           alt="user avatar"
           className="object-cover w-[38px] h-[38px] rounded-full"
         />
-        <h1 className="text-foreground text-[14px] font-light w-[100px]">
-          {user.username}
-        </h1>
-        {user.bio !== null && <p>{user.bio}</p>}
+        <div className="flex flex-col">
+          <h1 className="text-foreground text-[14px] font-light w-[100px]">
+            {user.username}
+          </h1>
+          {user.bio !== null && (
+            <p className="text-[12px] font-thin">{user.bio}</p>
+          )}
+        </div>
       </div>
 
       <div className="flex items-center gap-2 self-center mx-auto">
