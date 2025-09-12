@@ -1,6 +1,6 @@
 import type { ChatRoom, EndUser } from "@/types/chats";
 import { Input } from "@/components/ui/input";
-import { SendHorizontal } from "lucide-react";
+import { SendHorizontal, CheckCheck } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import fetchData from "@/lib/fetchData";
 import { useEffect, useState, useRef } from "react";
@@ -15,9 +15,9 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
   const [messages, setMessages] = useState<
     Array<{ message: string; id: number }>
   >([]);
+  const [endUser, setEndUser] = useState<EndUser | null>(null);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   const { register, getValues, watch, resetField } = useForm();
-  const [endUser, setEndUser] = useState<EndUser | null>(null);
 
   const { data: chatMessages } = useQuery({
     queryKey: [room],
@@ -56,11 +56,13 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
     };
   }, [messages]);
 
+  // join chatroom associated to room
   useEffect(() => {
     socket.emit("join room", room);
     setMessages([]);
   }, [room]);
 
+  // scroll automatically on bottom of chat when refreshing or going to chat
   useEffect(() => {
     window.addEventListener("load", () => {
       setTimeout(() => {
@@ -85,16 +87,15 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
       room,
       (res: { success: boolean }) => {
         if (res.success) {
-          console.log("message sent");
+          setMessages([...messages, { message, id: user.id }]);
         }
-        setMessages([...messages, { message, id: user.id }]);
       }
     );
     resetField("message");
   };
 
   return (
-    <div className="flex flex-col justify-end w-full max-h-[764px]">
+    <div className="flex flex-col justify-end w-full max-h-[783px]">
       <div className="flex items-center gap-2 bg-secondary p-3 rounded-tr-lg w-full top-0 mb-auto border border-b-border border-t-0 border-l-0 border-r-0">
         <img
           src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${endUser?.avatar}`}
