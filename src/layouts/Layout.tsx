@@ -38,7 +38,7 @@ const Layout = ({ children }: ReactProps) => {
   };
 
   return (
-    <main className="grid grid-cols-[1fr_1024px_1fr] grid-rows-[62px_1fr_62px] p-4 gap-2 h-full max-h-full">
+    <main className="grid grid-cols-[1fr_1024px_1fr] grid-rows-[62px_1fr_28px] p-4 gap-2 h-full max-h-full">
       <header className="flex justify-between items-center h-fit p-3 col-start-2 col-end-3 row-start-1 row-end-2 border-border border bg-card rounded-sm">
         <nav className="flex list-none gap-4">
           <NavLink to="/chat">Chats</NavLink>
@@ -57,7 +57,7 @@ const Layout = ({ children }: ReactProps) => {
         </div>
       </header>
       {children}
-      <footer className="col-start-2 col-end-3 bg-card border border-border p-4 rounded-sm flex justify-center items-center">
+      <footer className="col-start-2 col-end-3 p-2 rounded-sm flex justify-center items-center pt-5">
         <p>made with ♡ by nethan</p>
       </footer>
     </main>

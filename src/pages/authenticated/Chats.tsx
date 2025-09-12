@@ -6,7 +6,6 @@ import fetchData from "@/lib/fetchData";
 import ChatInterface from "@/components/chats/ChatInterface";
 import useUser from "@/hooks/useUser";
 import { useEffect } from "react";
-import { socket } from "../../socket";
 
 const Chats = () => {
   const { room } = useParams();
