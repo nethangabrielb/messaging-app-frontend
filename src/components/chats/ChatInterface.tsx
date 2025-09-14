@@ -1,6 +1,6 @@
 import type { ChatRoom, EndUser } from "@/types/chats";
 import { Input } from "@/components/ui/input";
-import { SendHorizontal, CheckCheck } from "lucide-react";
+import { SendHorizontal } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import fetchData from "@/lib/fetchData";
 import { useEffect, useState, useRef } from "react";
@@ -13,11 +13,16 @@ import { socket } from "../../socket";
 
 const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
   const [messages, setMessages] = useState<
-    Array<{ message: string; id: number }>
+    Array<{
+      message: string;
+      senderId: number;
+      sending: boolean;
+      messageId: number;
+    }>
   >([]);
   const [endUser, setEndUser] = useState<EndUser | null>(null);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
-  const { register, getValues, watch, resetField } = useForm();
+  const { register, getValues, watch, resetField, handleSubmit } = useForm();
 
   const { data: chatMessages } = useQuery({
     queryKey: [room],
@@ -45,8 +50,24 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
   }, [room, userChats]);
 
   useEffect(() => {
-    const messageHandler = (message: string, sender: User) => {
-      setMessages([...messages, { message, id: sender.id }]);
+    const messageHandler = (
+      message: string,
+      sender: User,
+      randomId: number
+    ) => {
+      const updatedMessages = messages.map((mess) => {
+        if (mess.messageId === randomId) {
+          return {
+            message: message,
+            senderId: sender.id,
+            sending: false,
+            messageId: randomId,
+          };
+        } else {
+          return mess;
+        }
+      });
+      setMessages(updatedMessages);
     };
 
     socket.on("message", messageHandler);
@@ -77,25 +98,31 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
     });
   }, [room, messages]);
 
-  const sendMessage = (e: React.MouseEvent<HTMLFormElement>) => {
+  const sendMessage = () => {
     const message = getValues("message");
-    e.preventDefault();
+    const randomId = Math.floor(Math.random() * 99999999);
+    setMessages((prev) => [
+      ...prev,
+      { message, senderId: user.id, sending: true, messageId: randomId },
+    ]);
+    resetField("message");
     socket.emit(
       "message",
       message,
       token,
       room,
+      randomId,
       (res: { success: boolean }) => {
         if (res.success) {
-          setMessages([...messages, { message, id: user.id }]);
+          console.log("message sent success");
         }
       }
     );
-    resetField("message");
   };
+  console.table(messages);
 
   return (
-    <div className="flex flex-col justify-end w-full max-h-[783px]">
+    <div className="flex flex-col justify-end w-full max-h-[823px]">
       <div className="flex items-center gap-2 bg-secondary p-3 rounded-tr-lg w-full top-0 mb-auto border border-b-border border-t-0 border-l-0 border-r-0">
         <img
           src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${endUser?.avatar}`}
@@ -142,14 +169,18 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
         */}
         {messages.map((message) => {
           return (
-            <div
-              className={clsx(
-                "border border-border bg-secondary rounded-lg p-2 px-3 w-fit font-light text-[14px]",
-                message.id !== user?.id ? "self-start" : "self-end"
+            <div className="flex items-center gap-2" key={crypto.randomUUID()}>
+              <div
+                className={clsx(
+                  "border border-border bg-secondary rounded-lg p-2 px-3 w-fit font-light text-[14px]",
+                  message.senderId !== user?.id ? "self-start" : "self-end"
+                )}
+              >
+                {message.message}
+              </div>
+              {message.sending && (
+                <div className="p-2 border border-t-primary animate-spin rounded-full"></div>
               )}
-              key={crypto.randomUUID()}
-            >
-              {message.message}
             </div>
           );
         })}
@@ -159,7 +190,7 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
       {/* Send message input interface */}
       <form
         className="flex justify-center items-center gap-1 w-full p-2 static"
-        onSubmit={sendMessage}
+        onSubmit={handleSubmit(sendMessage)}
       >
         <Input
           {...register("message")}
