@@ -41,8 +41,26 @@ const Layout = ({ children }: ReactProps) => {
     <main className="grid grid-cols-[1fr_1024px_1fr] grid-rows-[62px_1fr_28px] p-4 gap-2 h-full max-h-full">
       <header className="flex justify-between items-center h-fit p-3 col-start-2 col-end-3 row-start-1 row-end-2 border-border border bg-card rounded-sm">
         <nav className="flex list-none gap-4">
-          <NavLink to="/chat">Chats</NavLink>
-          <NavLink to="/people">People</NavLink>
+          <NavLink
+            to="/chat"
+            className={({ isActive }) =>
+              isActive
+                ? "underline underline-offset-4"
+                : "no-underline hover:underline hover:underline-offset-4"
+            }
+          >
+            Chats
+          </NavLink>
+          <NavLink
+            to="/people"
+            className={({ isActive }) =>
+              isActive
+                ? "underline underline-offset-4"
+                : "no-underline hover:underline hover:underline-offset-4"
+            }
+          >
+            People
+          </NavLink>
         </nav>
         <div className="flex items-center gap-3 ">
           <ChangeStatus
