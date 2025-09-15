@@ -73,7 +73,7 @@ const PeopleRow = ({ user }: Props) => {
       </div>
 
       <Button
-        className="flex self-end"
+        className="flex self-center"
         onClick={chatHandler}
         id={String(user.id)}
       >
