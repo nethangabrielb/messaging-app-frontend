@@ -137,7 +137,7 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
       <div className="flex items-center gap-2 bg-secondary p-3 rounded-tr-lg w-full top-0 mb-auto border border-b-border border-t-0 border-l-0 border-r-0">
         <img
           src={`${
-            endUser
+            endUser?.avatar
               ? `${import.meta.env.VITE_R2_PUBLIC_URL}/${endUser?.avatar}`
               : "/default.jpg"
           }`}
