@@ -51,7 +51,11 @@ const PeopleRow = ({ user }: Props) => {
     <section className="flex justify-between items-center p-4 border-border border rounded-lg w-[80%]">
       <div className="flex gap-4 items-center">
         <img
-          src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${user.avatar}`}
+          src={`${
+            user.avatar
+              ? `${import.meta.env.VITE_R2_PUBLIC_URL}/${user.avatar}`
+              : "/default.jpg"
+          }`}
           alt="user avatar"
           className="object-cover w-[38px] h-[38px] rounded-full"
         />

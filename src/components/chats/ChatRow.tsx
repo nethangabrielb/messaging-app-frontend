@@ -18,7 +18,11 @@ const ChatRow = ({ chat, room }: Chat) => {
       onClick={openChatHandler}
     >
       <img
-        src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${chat?.users[0]?.avatar}`}
+        src={`${
+          chat?.users[0]?.avatar
+            ? `${import.meta.env.VITE_R2_PUBLIC_URL}/${chat?.users[0]?.avatar}`
+            : "/default.jpg"
+        }`}
         alt="user avatar"
         className="object-cover w-[38px] h-[38px]  rounded-full"
       />
