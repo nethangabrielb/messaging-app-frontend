@@ -67,7 +67,19 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
           return mess;
         }
       });
-      setMessages(updatedMessages);
+      if (sender.id === user?.id) {
+        setMessages(updatedMessages);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          {
+            message: message,
+            senderId: sender.id,
+            sending: false,
+            messageId: randomId,
+          },
+        ]);
+      }
     };
 
     socket.on("message", messageHandler);
@@ -119,10 +131,9 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
       }
     );
   };
-  console.table(messages);
 
   return (
-    <div className="flex flex-col justify-end w-full max-h-[823px]">
+    <div className="flex flex-col justify-end w-full max-h-[796px]">
       <div className="flex items-center gap-2 bg-secondary p-3 rounded-tr-lg w-full top-0 mb-auto border border-b-border border-t-0 border-l-0 border-r-0">
         <img
           src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${endUser?.avatar}`}
@@ -169,13 +180,14 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
         */}
         {messages.map((message) => {
           return (
-            <div className="flex items-center gap-2" key={crypto.randomUUID()}>
-              <div
-                className={clsx(
-                  "border border-border bg-secondary rounded-lg p-2 px-3 w-fit font-light text-[14px]",
-                  message.senderId !== user?.id ? "self-start" : "self-end"
-                )}
-              >
+            <div
+              className={clsx(
+                "flex items-center gap-2",
+                message.senderId !== user?.id ? "self-start" : "self-end"
+              )}
+              key={crypto.randomUUID()}
+            >
+              <div className="border border-border bg-secondary rounded-lg p-2 px-3 w-fit font-light text-[14px]">
                 {message.message}
               </div>
               {message.sending && (
