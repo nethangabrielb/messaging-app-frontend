@@ -56,11 +56,11 @@ const PeopleRow = ({ user }: Props) => {
           className="object-cover w-[38px] h-[38px] rounded-full"
         />
         <div className="flex flex-col overflow-hidden">
-          <h1 className="text-foreground text-[14px] font-light w-[100px]">
+          <h1 className="text-foreground text-[16px] font-light w-[100px]">
             {user.username}
           </h1>
           {user.bio !== null && (
-            <p className="max-w-[100px] text-[12px] font-thin">{user.bio}</p>
+            <p className="max-w-[100px] text-[11px] font-thin">{user.bio}</p>
           )}
         </div>
       </div>
