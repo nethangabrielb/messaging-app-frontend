@@ -60,7 +60,7 @@ const PeopleRow = ({ user }: Props) => {
             {user.username}
           </h1>
           {user.bio !== null && (
-            <p className="max-w-[300px] text-[12px] font-thin">{user.bio}</p>
+            <p className="max-w-[100px] text-[12px] font-thin">{user.bio}</p>
           )}
         </div>
       </div>
