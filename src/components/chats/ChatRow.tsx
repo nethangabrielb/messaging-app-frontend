@@ -2,18 +2,18 @@ import type { Chat } from "@/types/chats";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 
-const ChatRow = ({ chat, room }: Chat) => {
+const ChatRow = ({ chat, roomId }: Chat) => {
   const navigate = useNavigate();
 
   const openChatHandler = () => {
-    navigate(`/chat/${chat.name}`);
+    navigate(`/chat/${chat.id}`);
   };
 
   return (
     <button
       className={clsx(
         "flex flex-start items-center gap-4 p-4 hover:bg-secondary rounded-lg transition duration-100 cursor-pointer w-full",
-        chat.name === room && "bg-secondary"
+        chat.id === roomId ? "bg-secondary" : ""
       )}
       onClick={openChatHandler}
     >

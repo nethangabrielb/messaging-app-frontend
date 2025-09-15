@@ -10,7 +10,6 @@ interface Acknowledgement {
   message: string;
   room: {
     id: number;
-    name: string;
   };
 }
 
@@ -39,7 +38,7 @@ const PeopleRow = ({ user }: Props) => {
       buttonEvent.id,
       (res: Acknowledgement) => {
         if (res.success) {
-          navigate(`/chat/${res.room.name}`);
+          navigate(`/chat/${res.room.id}`);
         } else {
           toast.error(res.message);
         }

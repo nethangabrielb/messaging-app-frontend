@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/chat/:room",
+    path: "/chat/:roomId",
     loader: protectedLoader,
     element: (
       <Layout>

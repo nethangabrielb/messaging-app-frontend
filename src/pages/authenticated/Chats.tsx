@@ -8,7 +8,7 @@ import useUser from "@/hooks/useUser";
 import { useEffect } from "react";
 
 const Chats = () => {
-  const { room } = useParams();
+  const { roomId } = useParams();
   const { user } = useUser();
   const navigate = useNavigate();
   const token = JSON.parse(localStorage.getItem("token") as string);
@@ -23,20 +23,30 @@ const Chats = () => {
 
   useEffect(() => {
     if (userChats?.data.length >= 1) {
-      navigate(`/chat/${userChats?.data[0].name}`);
+      if (!roomId) {
+        navigate(`/chat/${userChats?.data[0].id}`);
+      }
     }
-  }, [userChats?.data, navigate]);
+  }, []);
+
+  console.log(userChats);
 
   return (
     <main className="flex col-start-2 col-end-3 row-start-2 border border-border bg-card rounded-sm max-h-full">
       <aside className="w-[30%] p-2 border-r border-r-border flex flex-col gap-2">
         {userChats?.data?.map((chat: ChatOverview) => {
-          return <ChatRow key={chat.id} chat={chat} room={room}></ChatRow>;
+          return (
+            <ChatRow
+              key={chat.id}
+              chat={chat}
+              roomId={Number(roomId)}
+            ></ChatRow>
+          );
         })}
       </aside>
-      {room && (
+      {roomId && (
         <ChatInterface
-          room={room}
+          roomId={Number(roomId)}
           user={user?.data[0]}
           token={token}
           userChats={userChats?.data}

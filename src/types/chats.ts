@@ -3,7 +3,6 @@ import type { User } from "@/types/user";
 // interface for overview of chats in chats row
 interface ChatOverview {
   id: number;
-  name: string;
   users: [
     {
       username: string;
@@ -28,12 +27,12 @@ interface UserChats {
 // type props for chatrow component
 type Chat = {
   chat: ChatOverview;
-  room: string | undefined;
+  roomId: number;
 };
 
 // type for room name
 type ChatRoom = {
-  room: string;
+  roomId: number;
   user: User;
   token: string;
   userChats: Array<UserChats>;
