@@ -34,7 +34,11 @@ export function HeaderDropdown({ user, logoutHandler }: Props) {
         className="h-[34px] w-[34px] rounded-full cursor-pointer select-none object-cover"
       >
         <img
-          src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${user?.avatar}`}
+          src={`${
+            user?.avatar
+              ? `${import.meta.env.VITE_R2_PUBLIC_URL}/${user?.avatar}`
+              : "/default.jpg"
+          }`}
           alt="user avatar"
           className="object-contain"
         />
