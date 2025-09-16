@@ -3,6 +3,7 @@ import type { User } from "@/types/user";
 // interface for overview of chats in chats row
 interface ChatOverview {
   id: number;
+  unread: number;
   users: [
     {
       username: string;
