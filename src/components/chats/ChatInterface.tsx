@@ -69,7 +69,7 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
       });
       if (sender.id === user?.id) {
         setMessages(updatedMessages);
-      } else {
+      } else if (sender.username === endUser?.username) {
         setMessages((prev) => [
           ...prev,
           {
@@ -80,6 +80,7 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
           },
         ]);
       }
+      // socket.emit("notification", roomId, sender.id);
     };
 
     socket.on("message", messageHandler);
