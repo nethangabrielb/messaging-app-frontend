@@ -2,7 +2,7 @@ import type { Chat } from "@/types/chats";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 
-const ChatRow = ({ chat, roomId }: Chat) => {
+const ChatRow = ({ chat, roomId, user }: Chat) => {
   const navigate = useNavigate();
 
   const openChatHandler = () => {
@@ -31,11 +31,12 @@ const ChatRow = ({ chat, roomId }: Chat) => {
         />
         <h1 className="font-light text-[14px]">{chat.users[0].username}</h1>
       </div>
-      {chat?.unread > 0 && (
-        <div className="w-[20px] h-[20px] bg-red-500 rounded-full flex justify-center items-center font-bold text-neutral-800">
-          {chat?.unread}
-        </div>
-      )}
+      {chat?.Notification.length > 0 &&
+        chat?.Notification[0].userId === user.id && (
+          <div className="w-[18px] h-[18px] text-[14px] flex justify-center items-center text-neutral-800 bg-red-500 rounded-full">
+            {chat?.Notification[0].count}
+          </div>
+        )}
     </button>
   );
 };

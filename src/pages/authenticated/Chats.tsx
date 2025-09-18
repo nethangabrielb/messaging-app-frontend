@@ -6,6 +6,7 @@ import fetchData from "@/lib/fetchData";
 import ChatInterface from "@/components/chats/ChatInterface";
 import useUser from "@/hooks/useUser";
 import { useEffect } from "react";
+import { socket } from "../../socket";
 
 const Chats = () => {
   const { roomId } = useParams();
@@ -13,7 +14,7 @@ const Chats = () => {
   const navigate = useNavigate();
   const token = JSON.parse(localStorage.getItem("token") as string);
 
-  const { data: userChats } = useQuery({
+  const { data: userChats, refetch } = useQuery({
     queryKey: ["chats"],
     queryFn: async () => {
       const url = `${import.meta.env.VITE_SERVER_URL}/api/chats`;
@@ -29,7 +30,23 @@ const Chats = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const notificationHandler = (success: boolean) => {
+      if (success) {
+        console.log("RECEIVED CHAT");
+        refetch();
+      }
+    };
+
+    socket.on("notification", notificationHandler);
+
+    return () => {
+      socket.off("notification", notificationHandler);
+    };
+  }, []);
+
   console.log(userChats);
+  console.log(user);
 
   return (
     <main className="flex col-start-2 col-end-3 row-start-2 border border-border bg-card rounded-sm max-h-full">
@@ -40,6 +57,7 @@ const Chats = () => {
               key={chat.id}
               chat={chat}
               roomId={Number(roomId)}
+              user={user?.data[0]}
             ></ChatRow>
           );
         })}

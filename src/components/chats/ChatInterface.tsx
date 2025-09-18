@@ -53,7 +53,8 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
     const messageHandler = (
       message: string,
       sender: User,
-      randomId: number
+      randomId: number,
+      roomIdRecipient: number
     ) => {
       const updatedMessages = messages.map((mess) => {
         if (mess.messageId === randomId) {
@@ -79,8 +80,9 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
             messageId: randomId,
           },
         ]);
+      } else {
+        socket.emit("notification", roomIdRecipient, user?.id);
       }
-      // socket.emit("notification", roomId, sender.id);
     };
 
     socket.on("message", messageHandler);
