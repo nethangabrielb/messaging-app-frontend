@@ -71,11 +71,11 @@ const Profile = () => {
           method: "PUT",
           headers: {
             authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token") as string
+              localStorage.getItem("token") as string,
             )}`,
           },
           body: formData,
-        }
+        },
       );
     },
     onSuccess: async (res) => {
@@ -116,32 +116,32 @@ const Profile = () => {
 
   return (
     <form
-      className="flex justify-around w-full gap-4 p-4"
+      className="flex w-full justify-around gap-4 p-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex flex-col gap-4 max-w-full">
+      <div className="flex max-w-full flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <Label className="font-extralight ml-1 text-sm">Username</Label>
+          <Label className="ml-1 text-sm font-extralight">Username</Label>
           <Input className="font-light" {...register("username")}></Input>
           {errors.username && (
-            <p className="text-red-500 text-[9px] translate-y-[4px] translate-x-[4px]">
+            <p className="translate-x-[4px] translate-y-[4px] text-[9px] text-red-500">
               {errors.username.message}
             </p>
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <Label className="font-extralight ml-1 text-sm">Email</Label>
+          <Label className="ml-1 text-sm font-extralight">Email</Label>
           <Input className="font-light" {...register("email")}></Input>
           {errors.email && (
-            <p className="text-red-500 text-[9px] translate-y-[4px] translate-x-[4px]">
+            <p className="translate-x-[4px] translate-y-[4px] text-[9px] text-red-500">
               {errors.email.message}
             </p>
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <Label className="font-extralight ml-1 text-sm">Bio</Label>
+          <Label className="ml-1 text-sm font-extralight">Bio</Label>
           <Textarea
-            className="font-light w-[234px]"
+            className="w-[234px] font-light"
             {...register("bio")}
           ></Textarea>
         </div>
@@ -155,7 +155,7 @@ const Profile = () => {
 
       <div className="flex flex-col items-center gap-2">
         <button
-          className="w-[150px] h-[150px] rounded-full relative hover:bg-neutral-500 hover:opacity-70"
+          className="relative h-[150px] w-[150px] rounded-full hover:bg-neutral-500 hover:opacity-70"
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
           onClick={avatarUploadHandler}
@@ -164,22 +164,24 @@ const Profile = () => {
             src={`${
               filePreview
                 ? URL.createObjectURL(filePreview)
-                : `${import.meta.env.VITE_R2_PUBLIC_URL}/${
-                    user?.data[0].avatar
-                  }`
+                : user?.data[0].avatar
+                  ? `${import.meta.env.VITE_R2_PUBLIC_URL}/${
+                      user?.data[0].avatar
+                    }`
+                  : "default.jpg"
             }`}
             alt="user avatar"
-            className="w-[150px] h-[150px] rounded-full object-cover"
+            className="h-[150px] w-[150px] rounded-full object-cover"
           />
           <Pencil
             className={clsx(
               "absolute top-[40%] left-[40%] size-[32px]",
-              hover ? "!opacity-100 visible stroke-white" : "invisible"
+              hover ? "visible stroke-white !opacity-100" : "invisible",
             )}
             ref={editAvatarBtn}
           ></Pencil>
         </button>
-        <p className="font-light text-sm">Profile avatar</p>
+        <p className="text-sm font-light">Profile avatar</p>
         <Input
           type="file"
           name="avatar"
