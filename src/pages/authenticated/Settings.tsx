@@ -1,20 +1,36 @@
-import { Outlet, useLocation, NavLink } from "react-router-dom";
+import { Outlet, useLocation, NavLink, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { User, Settings } from "lucide-react";
+import useWidth from "@/stores/widthStore";
+import { useEffect } from "react";
 
 const AccountSettings = () => {
   const location = useLocation();
+  const width = useWidth((state) => state.width);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (width >= 466) {
+      if (location.pathname === "/settings") {
+        navigate("/settings/profile");
+      }
+    } else if (location.pathname !== "/settings") {
+      console.log("oh no");
+      navigate("/settings");
+    }
+  }, [location.pathname, width, navigate]);
 
   return (
     <main className="border-border bg-card row-start-2 flex max-h-full rounded-sm border lg:col-start-2 lg:col-end-3">
       {/* Sidebar should be here */}
+
       <aside className="border-r-border flex w-[30%] flex-col gap-2 border-r p-2">
         <NavLink
           className={clsx(
             "flex-start hover:bg-secondary flex w-full cursor-pointer gap-4 rounded-lg p-4 transition duration-100",
-            location.pathname === "/settings" && "bg-secondary",
+            location.pathname === "/settings/profile" && "bg-secondary",
           )}
-          to={"/settings"}
+          to={"/settings/profile"}
         >
           <User></User>
           <p>Profile</p>

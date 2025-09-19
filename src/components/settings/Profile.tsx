@@ -116,12 +116,14 @@ const Profile = () => {
 
   return (
     <form
-      className="flex w-full justify-around gap-4 p-4"
+      className="flex w-full flex-col-reverse items-center justify-end gap-4 p-4 text-center md:flex-row md:items-start md:justify-around md:text-start"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex max-w-full flex-col gap-4">
+      <div className="flex max-w-full flex-col items-center gap-4 md:items-start">
         <div className="flex flex-col gap-1">
-          <Label className="ml-1 text-sm font-extralight">Username</Label>
+          <Label className="ml-1 text-center text-sm font-extralight">
+            Username
+          </Label>
           <Input className="font-light" {...register("username")}></Input>
           {errors.username && (
             <p className="translate-x-[4px] translate-y-[4px] text-[9px] text-red-500">

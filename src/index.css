@@ -54,6 +54,7 @@ button {
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --breakpoint-sm: 466px;
+  --breakpoint-md: 768px;
 }
 
 :root {
