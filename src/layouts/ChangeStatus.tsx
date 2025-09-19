@@ -12,7 +12,6 @@ import type {
   QueryObserverResult,
 } from "@tanstack/react-query";
 import useWidth from "@/stores/widthStore";
-import { useState } from "react";
 
 type Props = {
   user: User;
