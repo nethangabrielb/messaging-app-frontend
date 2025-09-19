@@ -24,7 +24,7 @@ const AccountSettings = () => {
     <main className="border-border bg-card row-start-2 flex max-h-full rounded-sm border lg:col-start-2 lg:col-end-3">
       {/* Sidebar should be here */}
 
-      <aside className="border-r-border flex w-[30%] flex-col gap-2 border-r p-2">
+      <aside className="border-r-border flex w-[30%] flex-col gap-2 border-r p-2 sm:w-[250px]">
         <NavLink
           className={clsx(
             "flex-start hover:bg-secondary flex w-full cursor-pointer gap-4 rounded-lg p-4 transition duration-100",

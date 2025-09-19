@@ -116,10 +116,10 @@ const Profile = () => {
 
   return (
     <form
-      className="flex w-full flex-col-reverse items-center justify-end gap-4 p-4 text-center md:flex-row md:items-start md:justify-around md:text-start"
+      className="flex w-fit flex-col-reverse items-center justify-end gap-4 p-4 text-center md:flex-row md:items-start md:justify-around md:text-start"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex max-w-full flex-col items-center gap-4 md:items-start">
+      <div className="flex w-full flex-col items-center gap-4 md:items-start">
         <div className="flex flex-col gap-1">
           <Label className="ml-1 text-center text-sm font-extralight">
             Username
@@ -143,7 +143,7 @@ const Profile = () => {
         <div className="flex flex-col gap-1">
           <Label className="ml-1 text-sm font-extralight">Bio</Label>
           <Textarea
-            className="w-[234px] font-light"
+            className="w-full font-light"
             {...register("bio")}
           ></Textarea>
         </div>
@@ -155,9 +155,9 @@ const Profile = () => {
         </Button>
       </div>
 
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex w-fit flex-col items-center gap-1 md:gap-2">
         <button
-          className="relative h-[150px] w-[150px] rounded-full hover:bg-neutral-500 hover:opacity-70"
+          className="relative flex h-[150px] w-[150px] items-center justify-center rounded-full hover:bg-neutral-500 hover:opacity-70"
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
           onClick={avatarUploadHandler}
@@ -173,7 +173,7 @@ const Profile = () => {
                   : "default.jpg"
             }`}
             alt="user avatar"
-            className="h-[150px] w-[150px] rounded-full object-cover"
+            className="h-[100px] w-[100px] rounded-full object-cover md:h-[150px] md:w-[150px]"
           />
           <Pencil
             className={clsx(
