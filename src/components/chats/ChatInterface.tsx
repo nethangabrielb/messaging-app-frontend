@@ -90,7 +90,7 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
     return () => {
       socket.off("message", messageHandler);
     };
-  }, [messages]);
+  }, [messages, user, endUser?.username]);
 
   // join chatroom associated to room
   useEffect(() => {
