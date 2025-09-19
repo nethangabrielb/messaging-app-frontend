@@ -1,6 +1,5 @@
 import type { ChatRoom, EndUser } from "@/types/chats";
 import { Input } from "@/components/ui/input";
-import { SendHorizontal } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import fetchData from "@/lib/fetchData";
 import { useEffect, useState, useRef } from "react";
@@ -10,6 +9,10 @@ import { useForm } from "react-hook-form";
 import type { MessageInterface } from "@/types/messages";
 import type { User } from "@/types/user";
 import { socket } from "../../socket";
+import useWidth from "@/stores/widthStore";
+import { ArrowLeft, SendHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
   const [messages, setMessages] = useState<
@@ -22,6 +25,8 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
   >([]);
   const [endUser, setEndUser] = useState<EndUser | null>(null);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
+  const width = useWidth((state) => state.width);
+  const navigate = useNavigate();
   const { register, getValues, watch, resetField, handleSubmit } = useForm();
 
   const { data: chatMessages } = useQuery({
@@ -156,6 +161,11 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
             </p>
           </div>
         </div>
+        {width < 466 && (
+          <Button className="ml-auto" onClick={() => navigate("/chat")}>
+            <ArrowLeft></ArrowLeft>
+          </Button>
+        )}
       </div>
       <div className="mt-2 flex flex-col items-end gap-2 overflow-y-auto px-4 sm:px-4 lg:px-10 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-600 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-transparent">
         {/* Render backend chat history here */}
