@@ -6,13 +6,13 @@ const AccountSettings = () => {
   const location = useLocation();
 
   return (
-    <main className="flex col-start-2 col-end-3 row-start-2 border border-border bg-card rounded-sm max-h-full">
+    <main className="border-border bg-card row-start-2 flex max-h-full rounded-sm border lg:col-start-2 lg:col-end-3">
       {/* Sidebar should be here */}
-      <aside className="w-[30%] p-2 border-r border-r-border flex flex-col gap-2">
+      <aside className="border-r-border flex w-[30%] flex-col gap-2 border-r p-2">
         <NavLink
           className={clsx(
-            "flex flex-start gap-4 p-4 hover:bg-secondary rounded-lg transition duration-100 cursor-pointer w-full",
-            location.pathname === "/settings" && "bg-secondary"
+            "flex-start hover:bg-secondary flex w-full cursor-pointer gap-4 rounded-lg p-4 transition duration-100",
+            location.pathname === "/settings" && "bg-secondary",
           )}
           to={"/settings"}
         >
@@ -21,8 +21,8 @@ const AccountSettings = () => {
         </NavLink>
         <NavLink
           className={clsx(
-            "flex flex-start gap-4 p-4 hover:bg-secondary rounded-lg transition duration-100 cursor-pointer w-full",
-            location.pathname === "/settings/account" && "bg-secondary"
+            "flex-start hover:bg-secondary flex w-full cursor-pointer gap-4 rounded-lg p-4 transition duration-100",
+            location.pathname === "/settings/account" && "bg-secondary",
           )}
           to={"/settings/account"}
         >

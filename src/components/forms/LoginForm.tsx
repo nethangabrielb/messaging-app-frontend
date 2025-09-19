@@ -68,7 +68,7 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
               if (res.success) {
                 navigate("/chat");
               }
-            }
+            },
           );
       }
     },
@@ -92,12 +92,12 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
           <div className="flex justify-between">
             <Label htmlFor="email">Email</Label>
             {errors.email && (
-              <p className="text-red-500 text-[9px] translate-y-[4px]">
+              <p className="translate-y-[4px] text-[9px] text-red-500">
                 Email can't be empty
               </p>
             )}
             {error.error === "email" && (
-              <p className="text-red-500 text-[9px] translate-y-[4px]">
+              <p className="translate-y-[4px] text-[9px] text-red-500">
                 {error.message}
               </p>
             )}
@@ -110,7 +110,7 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
             required
             className={clsx(
               errors.email ||
-                (error.error === "email" && "border-red-500 !ring-red-500")
+                (error.error === "email" && "border-red-500 !ring-red-500"),
             )}
             // Add an onChange listener here to remove error if
             // user is typing and finished typing
@@ -125,12 +125,12 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
             {errors.password && (
-              <p className="text-red-500 text-[9px] translate-y-[4px]">
+              <p className="translate-y-[4px] text-[9px] text-red-500">
                 Password must be at least 8 characters
               </p>
             )}
             {error.error === "password" && (
-              <p className="text-red-500 text-[9px] translate-y-[4px]">
+              <p className="translate-y-[4px] text-[9px] text-red-500">
                 {error.message}
               </p>
             )}
@@ -142,7 +142,7 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
             required
             className={clsx(
               errors.password ||
-                (error.error === "password" && "border-red-500 !ring-red-500")
+                (error.error === "password" && "border-red-500 !ring-red-500"),
             )}
             // Same here, we add an onChange listener here to remove error if
             // user is typing and finished typing
@@ -160,7 +160,7 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
         <button
-          className="underline underline-offset-4 cursor-pointer"
+          className="cursor-pointer underline underline-offset-4"
           onClick={() => {
             props.setForm("register");
             reset();

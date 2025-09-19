@@ -21,7 +21,7 @@ const PeopleRow = ({ user }: Props) => {
     user.status === "OFFLINE" && "bg-neutral-500",
     user.status === "ONLINE" && "bg-green-500",
     user.status === "BUSY" && "bg-red-500",
-    user.status === null && "bg-neutral-500"
+    user.status === null && "bg-neutral-500",
   );
 
   const chatHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -42,13 +42,13 @@ const PeopleRow = ({ user }: Props) => {
         } else {
           toast.error(res.message);
         }
-      }
+      },
     );
   };
 
   return (
-    <section className="flex justify-between items-center p-4 border-border border rounded-lg w-[80%]">
-      <div className="flex gap-4 items-center">
+    <section className="border-border flex w-full items-center justify-between rounded-lg border p-4 sm:w-[80%]">
+      <div className="flex items-center gap-1 sm:gap-4">
         <img
           src={`${
             user.avatar
@@ -56,10 +56,10 @@ const PeopleRow = ({ user }: Props) => {
               : "/default.jpg"
           }`}
           alt="user avatar"
-          className="object-cover w-[38px] h-[38px] rounded-full"
+          className="h-[38px] w-[38px] rounded-full object-cover"
         />
         <div className="flex flex-col overflow-hidden">
-          <h1 className="text-foreground text-[16px] font-light w-[100px]">
+          <h1 className="text-foreground w-[75px] text-[12px] font-light sm:w-[100px] sm:text-[16px]">
             {user.username}
           </h1>
           {user.bio !== null && (
@@ -68,9 +68,9 @@ const PeopleRow = ({ user }: Props) => {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 self-center mx-auto">
+      <div className="mx-auto flex items-center gap-2 self-center">
         <div className={statusClasses}></div>
-        <p className="font-light text-xs">
+        <p className="text-xs font-light not-sm:hidden">
           {!user.status ? "OFFLINE" : user.status}
         </p>
       </div>

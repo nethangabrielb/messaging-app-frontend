@@ -11,29 +11,32 @@ import type {
   RefetchOptions,
   QueryObserverResult,
 } from "@tanstack/react-query";
+import useWidth from "@/stores/widthStore";
+import { useState } from "react";
 
 type Props = {
   user: User;
   refetch: (
-    options?: RefetchOptions
+    options?: RefetchOptions,
   ) => Promise<QueryObserverResult<any, Error>>;
 };
 
 const ChangeStatus = ({ user, refetch }: Props) => {
   const token = JSON.parse(localStorage.getItem("token") as string);
+  const width = useWidth((state) => state.width);
 
   const status = user?.status;
-  let placeholder;
+  let placeholder: null | string = null;
 
   switch (status) {
     case "ONLINE":
-      placeholder = "🟢 Online";
+      placeholder = width < 466 ? "🟢" : "🟢 Online";
       break;
     case "OFFLINE":
-      placeholder = "⚫ Offline";
+      placeholder = width < 466 ? "⚫" : "⚫ Offline";
       break;
     case "BUSY":
-      placeholder = "🔴 Busy";
+      placeholder = width < 466 ? "🔴" : "🔴 Busy";
       break;
   }
 
@@ -48,13 +51,19 @@ const ChangeStatus = ({ user, refetch }: Props) => {
   if (user)
     return (
       <Select onValueChange={valueChangeHandler}>
-        <SelectTrigger className="w-[150px]">
-          <SelectValue placeholder={placeholder} />
+        <SelectTrigger className="sm:w-[150px]">
+          <SelectValue placeholder={placeholder}>{placeholder}</SelectValue>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="ONLINE">{"🟢 Online"}</SelectItem>
-          <SelectItem value="OFFLINE">{"⚫ Offline"}</SelectItem>
-          <SelectItem value="BUSY">{"🔴 Busy"}</SelectItem>
+          <SelectItem value="ONLINE">
+            <p>🟢 Online</p>
+          </SelectItem>
+          <SelectItem value="OFFLINE">
+            <p>⚫ Offline</p>
+          </SelectItem>
+          <SelectItem value="BUSY">
+            <p>🔴 Busy</p>
+          </SelectItem>
         </SelectContent>
       </Select>
     );

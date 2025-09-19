@@ -12,8 +12,8 @@ const ChatRow = ({ chat, roomId, user }: Chat) => {
   return (
     <button
       className={clsx(
-        "flex flex-start justify-between  items-center gap-4 p-4 hover:bg-secondary rounded-lg transition duration-100 cursor-pointer w-full",
-        chat.id === roomId ? "bg-secondary" : ""
+        "flex-start hover:bg-secondary flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg p-4 transition duration-100",
+        chat.id === roomId ? "bg-secondary" : "",
       )}
       onClick={openChatHandler}
     >
@@ -27,13 +27,15 @@ const ChatRow = ({ chat, roomId, user }: Chat) => {
               : "/default.jpg"
           }`}
           alt="user avatar"
-          className="object-cover w-[38px] h-[38px]  rounded-full"
+          className="h-[38px] w-[38px] rounded-full object-cover"
         />
-        <h1 className="font-light text-[14px]">{chat.users[0].username}</h1>
+        <h1 className="font-light sm:text-[12px] lg:text-[14px]">
+          {chat.users[0].username}
+        </h1>
       </div>
       {chat?.Notification.length > 0 &&
         chat?.Notification[0].userId === user.id && (
-          <div className="w-[18px] h-[18px] text-[14px] flex justify-center items-center text-neutral-800 bg-red-500 rounded-full">
+          <div className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-red-500 text-[14px] text-neutral-800">
             {chat?.Notification[0].count}
           </div>
         )}

@@ -10,8 +10,8 @@ const Message = ({ message, userId }: Props) => {
   return (
     <div
       className={clsx(
-        "border border-border bg-secondary rounded-lg p-2 px-3 w-fit font-light text-[14px]",
-        userId !== message.senderId ? "self-start" : "self-end"
+        "border-border bg-secondary w-fit rounded-lg border p-2 px-2 text-[12px] font-light sm:p-2 sm:px-2 sm:text-[12px] lg:p-2 lg:px-3 lg:text-[14px]",
+        userId !== message.senderId ? "self-start" : "self-end",
       )}
     >
       {message.message}

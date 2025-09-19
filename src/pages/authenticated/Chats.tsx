@@ -1,18 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ChatRow from "@/components/chats/ChatRow";
 import type { ChatOverview } from "@/types/chats";
 import fetchData from "@/lib/fetchData";
 import ChatInterface from "@/components/chats/ChatInterface";
 import useUser from "@/hooks/useUser";
-import { useEffect } from "react";
 import { socket } from "../../socket";
+import useWidth from "@/stores/widthStore";
 
 const Chats = () => {
   const { roomId } = useParams();
   const { user } = useUser();
   const navigate = useNavigate();
   const token = JSON.parse(localStorage.getItem("token") as string);
+  const width = useWidth((state) => state.width);
 
   const { data: userChats, refetch } = useQuery({
     queryKey: ["chats"],
@@ -24,11 +26,13 @@ const Chats = () => {
 
   useEffect(() => {
     if (userChats?.data.length >= 1) {
-      if (!roomId) {
-        navigate(`/chat/${userChats?.data[0].id}`);
+      if (!roomId && width) {
+        if (width > 466) {
+          navigate(`/chat/${userChats?.data[0].id}`);
+        }
       }
     }
-  }, [roomId, userChats?.data]);
+  }, [roomId, userChats?.data.length, width]);
 
   useEffect(() => {
     const notificationHandler = (success: boolean) => {
@@ -53,12 +57,14 @@ const Chats = () => {
             socket.emit(
               "clear notifications",
               user?.data[0]?.id,
-              Number(roomId)
+              Number(roomId),
             );
           }
         }
       });
     };
+
+    console.log(width);
 
     const clearNotificationsHandler = (success: boolean) => {
       if (success) {
@@ -76,26 +82,54 @@ const Chats = () => {
   }, [roomId, user, userChats, refetch]);
 
   return (
-    <main className="flex col-start-2 col-end-3 row-start-2 border border-border bg-card rounded-sm max-h-full">
-      <aside className="w-[30%] p-2 border-r border-r-border flex flex-col gap-2">
-        {userChats?.data?.map((chat: ChatOverview) => {
-          return (
-            <ChatRow
-              key={chat.id}
-              chat={chat}
+    <main className="border-border bg-card row-start-2 flex max-h-full rounded-sm border lg:col-start-2 lg:col-end-3">
+      {width && width < 466 ? (
+        <>
+          {roomId ? (
+            <ChatInterface
               roomId={Number(roomId)}
               user={user?.data[0]}
-            ></ChatRow>
-          );
-        })}
-      </aside>
-      {roomId && (
-        <ChatInterface
-          roomId={Number(roomId)}
-          user={user?.data[0]}
-          token={token}
-          userChats={userChats?.data}
-        ></ChatInterface>
+              token={token}
+              userChats={userChats?.data}
+            ></ChatInterface>
+          ) : (
+            <aside className="border-r-border flex w-full flex-col gap-2 border-r p-2 sm:w-[250px]">
+              {userChats?.data?.map((chat: ChatOverview) => {
+                return (
+                  <ChatRow
+                    key={chat.id}
+                    chat={chat}
+                    roomId={Number(roomId)}
+                    user={user?.data[0]}
+                  ></ChatRow>
+                );
+              })}
+            </aside>
+          )}
+        </>
+      ) : (
+        <>
+          <aside className="border-r-border flex w-full flex-col gap-2 border-r p-2 sm:w-[250px]">
+            {userChats?.data?.map((chat: ChatOverview) => {
+              return (
+                <ChatRow
+                  key={chat.id}
+                  chat={chat}
+                  roomId={Number(roomId)}
+                  user={user?.data[0]}
+                ></ChatRow>
+              );
+            })}
+          </aside>
+          {roomId && (
+            <ChatInterface
+              roomId={Number(roomId)}
+              user={user?.data[0]}
+              token={token}
+              userChats={userChats?.data}
+            ></ChatInterface>
+          )}
+        </>
       )}
     </main>
   );

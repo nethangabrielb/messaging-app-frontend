@@ -37,7 +37,7 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
     endUser?.status === "OFFLINE" && "bg-neutral-500",
     endUser?.status === "ONLINE" && "bg-green-500",
     endUser?.status === "BUSY" && "bg-red-500",
-    endUser?.status === null && "bg-neutral-500"
+    endUser?.status === null && "bg-neutral-500",
   );
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
       message: string,
       sender: User,
       randomId: number,
-      roomIdRecipient: number
+      roomIdRecipient: number,
     ) => {
       const updatedMessages = messages.map((mess) => {
         if (mess.messageId === randomId) {
@@ -131,13 +131,13 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
         if (res.success) {
           console.log("message sent success");
         }
-      }
+      },
     );
   };
 
   return (
-    <div className="flex flex-col justify-end w-full max-h-[796px]">
-      <div className="flex items-center gap-2 bg-secondary p-3 rounded-tr-lg w-full top-0 mb-auto border border-b-border border-t-0 border-l-0 border-r-0">
+    <div className="flex max-h-[796px] w-full flex-col justify-end">
+      <div className="bg-secondary border-b-border top-0 mb-auto flex w-full items-center gap-2 rounded-tr-lg border border-t-0 border-r-0 border-l-0 p-3">
         <img
           src={`${
             endUser?.avatar
@@ -145,27 +145,19 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
               : "/default.jpg"
           }`}
           alt="user avatar"
-          className="object-cover w-[38px] h-[38px]  rounded-full"
+          className="h-[38px] w-[38px] rounded-full object-cover"
         />
         <div className="flex flex-col gap-1">
           <p className="text-[16px] font-light">{endUser?.username}</p>
           <div className="flex items-center gap-1">
             <div className={statusClasses}></div>
-            <p className="font-thin text-xs">
+            <p className="text-xs font-thin">
               {!endUser?.status ? "OFFLINE" : endUser?.status}
             </p>
           </div>
         </div>
       </div>
-      <div
-        className="flex flex-col items-end px-10 gap-2 overflow-y-auto  [&::-webkit-scrollbar]:w-2
-  [&::-webkit-scrollbar-track]:rounded-full
-  [&::-webkit-scrollbar-track]:bg-gray-100
-  [&::-webkit-scrollbar-thumb]:rounded-full
-  [&::-webkit-scrollbar-thumb]:bg-gray-300
-  dark:[&::-webkit-scrollbar-track]:bg-transparent
-  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-600 mt-2"
-      >
+      <div className="mt-2 flex flex-col items-end gap-2 overflow-y-auto px-4 sm:px-4 lg:px-10 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-600 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-transparent">
         {/* Render backend chat history here */}
         {chatMessages?.data.map((message: MessageInterface) => {
           return (
@@ -190,15 +182,15 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
             <div
               className={clsx(
                 "flex items-center gap-2",
-                message.senderId !== user?.id ? "self-start" : "self-end"
+                message.senderId !== user?.id ? "self-start" : "self-end",
               )}
               key={crypto.randomUUID()}
             >
-              <div className="border border-border bg-secondary rounded-lg p-2 px-3 w-fit font-light text-[14px]">
+              <div className="border-border bg-secondary w-fit rounded-lg border p-2 px-3 text-[14px] font-light">
                 {message.message}
               </div>
               {message.sending && (
-                <div className="p-2 border border-t-primary animate-spin rounded-full"></div>
+                <div className="border-t-primary animate-spin rounded-full border p-2"></div>
               )}
             </div>
           );
@@ -208,7 +200,7 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
 
       {/* Send message input interface */}
       <form
-        className="flex justify-center items-center gap-1 w-full p-2 static"
+        className="static flex w-full items-center justify-center gap-1 p-2"
         onSubmit={handleSubmit(sendMessage)}
       >
         <Input
@@ -220,8 +212,8 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
         ></Input>
         <button
           className={clsx(
-            "p-2 rounded-full !cursor-default",
-            watch("message") !== "" && "hover:bg-neutral-800 !cursor-pointer"
+            "!cursor-default rounded-full p-2",
+            watch("message") !== "" && "!cursor-pointer hover:bg-neutral-800",
           )}
           type="submit"
           disabled={watch("message") === ""}

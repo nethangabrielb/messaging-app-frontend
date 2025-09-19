@@ -8,11 +8,13 @@ import useUser from "@/hooks/useUser";
 import { HeaderDropdown } from "@/layouts/HeaderDropdown";
 import ChangeStatus from "@/layouts/ChangeStatus";
 import Navigation from "@/layouts/Navigation";
+import useWidth from "@/stores/widthStore";
 
 const Layout = ({ children }: ReactProps) => {
   const navigate = useNavigate();
   const { user, refetchUser } = useUser();
   const token = JSON.parse(localStorage.getItem("token") as string);
+  const updateWidth = useWidth((state) => state.updateWidth);
 
   useEffect(() => {
     const isAuthenticated = protectedLoader();
@@ -23,7 +25,16 @@ const Layout = ({ children }: ReactProps) => {
         refetchUser();
       }
     });
-  }, []);
+  }, [refetchUser]);
+
+  useEffect(() => {
+    window.addEventListener("load", () => {
+      updateWidth(window.innerWidth);
+    });
+    window.addEventListener("resize", () => {
+      updateWidth(window.innerWidth);
+    });
+  }, [updateWidth]);
 
   const logoutHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -39,10 +50,10 @@ const Layout = ({ children }: ReactProps) => {
   };
 
   return (
-    <main className="grid grid-cols-[1fr_1024px_1fr] grid-rows-[62px_1fr_28px] p-4 gap-2 h-full max-h-full">
-      <header className="flex justify-between items-center h-fit p-3 col-start-2 col-end-3 row-start-1 row-end-2 border-border border bg-card rounded-sm">
+    <main className="grid h-full max-h-full grid-rows-[62px_1fr_28px] gap-2 p-4 sm:grid-cols-[1fr] lg:grid-cols-[1fr_1024px_1fr]">
+      <header className="border-border bg-card row-start-1 row-end-2 flex h-fit items-center justify-between rounded-sm border p-3 lg:col-start-2 lg:col-end-3">
         <Navigation></Navigation>
-        <div className="flex items-center gap-3 ">
+        <div className="flex items-center gap-3">
           <ChangeStatus
             user={user?.data[0]}
             refetch={refetchUser}
@@ -55,7 +66,7 @@ const Layout = ({ children }: ReactProps) => {
         </div>
       </header>
       {children}
-      <footer className="col-start-2 col-end-3 p-2 rounded-sm flex justify-center items-center pt-5">
+      <footer className="flex items-center justify-center rounded-sm p-2 pt-5 lg:col-start-2 lg:col-end-3">
         <p>made with ♡ by nethan</p>
       </footer>
     </main>

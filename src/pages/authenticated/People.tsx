@@ -43,11 +43,11 @@ const People = () => {
   }, []);
 
   return (
-    <main className="flex flex-col items-center col-start-2 col-end-3 row-start-2 p-2 border border-border bg-card rounded-sm gap-4 h-full">
-      <div className="flex gap-2 mb-10 mt-5 w-[50%]">
+    <main className="border-border bg-card row-start-2 flex h-full flex-col items-center gap-4 rounded-sm border p-2 lg:col-start-2 lg:col-end-3">
+      <div className="mt-8 mb-4 flex w-full gap-2 sm:mt-5 sm:mb-10 sm:w-[50%]">
         <Input
           type="search"
-          className="w-[50%] grow-1"
+          className="w-[80%] grow-1 placeholder:text-[12px] sm:w-[50%]"
           placeholder="Search someone..."
           onChange={(e) => setSearch(e.target.value)}
         ></Input>
