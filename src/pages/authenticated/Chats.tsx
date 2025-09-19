@@ -28,7 +28,7 @@ const Chats = () => {
         navigate(`/chat/${userChats?.data[0].id}`);
       }
     }
-  }, []);
+  }, [roomId, userChats?.data]);
 
   useEffect(() => {
     const notificationHandler = (success: boolean) => {
@@ -45,8 +45,35 @@ const Chats = () => {
     };
   }, []);
 
-  console.log(userChats);
-  console.log(user);
+  useEffect(() => {
+    const clearNotifications = () => {
+      userChats?.data.forEach((chat: ChatOverview) => {
+        if (chat.id === Number(roomId)) {
+          if (chat.Notification.length > 0) {
+            socket.emit(
+              "clear notifications",
+              user?.data[0]?.id,
+              Number(roomId)
+            );
+          }
+        }
+      });
+    };
+
+    const clearNotificationsHandler = (success: boolean) => {
+      if (success) {
+        refetch();
+      }
+    };
+
+    clearNotifications();
+
+    socket.on("clear notifications", clearNotificationsHandler);
+
+    return () => {
+      socket.off("clear notifications", clearNotificationsHandler);
+    };
+  }, [roomId, user, userChats, refetch]);
 
   return (
     <main className="flex col-start-2 col-end-3 row-start-2 border border-border bg-card rounded-sm max-h-full">
