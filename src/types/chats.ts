@@ -1,15 +1,25 @@
 import type { User } from "@/types/user";
 
+// notification
+interface Notification {
+  count: number;
+  id: number;
+  roomId: number;
+  userId: number;
+}
+
 // interface for overview of chats in chats row
 interface ChatOverview {
   id: number;
-  name: string;
+  unread: number;
   users: [
     {
+      id: number;
       username: string;
       avatar: string;
     }
   ];
+  Notification: Array<Notification>;
 }
 
 interface EndUser {
@@ -28,12 +38,13 @@ interface UserChats {
 // type props for chatrow component
 type Chat = {
   chat: ChatOverview;
-  room: string | undefined;
+  user: User;
+  roomId: number;
 };
 
 // type for room name
 type ChatRoom = {
-  room: string;
+  roomId: number;
   user: User;
   token: string;
   userChats: Array<UserChats>;

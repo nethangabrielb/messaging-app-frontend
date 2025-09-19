@@ -10,7 +10,6 @@ interface Acknowledgement {
   message: string;
   room: {
     id: number;
-    name: string;
   };
 }
 
@@ -39,7 +38,7 @@ const PeopleRow = ({ user }: Props) => {
       buttonEvent.id,
       (res: Acknowledgement) => {
         if (res.success) {
-          navigate(`/chat/${res.room.name}`);
+          navigate(`/chat/${res.room.id}`);
         } else {
           toast.error(res.message);
         }
@@ -51,16 +50,20 @@ const PeopleRow = ({ user }: Props) => {
     <section className="flex justify-between items-center p-4 border-border border rounded-lg w-[80%]">
       <div className="flex gap-4 items-center">
         <img
-          src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${user.avatar}`}
+          src={`${
+            user.avatar
+              ? `${import.meta.env.VITE_R2_PUBLIC_URL}/${user.avatar}`
+              : "/default.jpg"
+          }`}
           alt="user avatar"
           className="object-cover w-[38px] h-[38px] rounded-full"
         />
         <div className="flex flex-col overflow-hidden">
-          <h1 className="text-foreground text-[14px] font-light w-[100px]">
+          <h1 className="text-foreground text-[16px] font-light w-[100px]">
             {user.username}
           </h1>
           {user.bio !== null && (
-            <p className="max-w-[100px] text-[12px] font-thin">{user.bio}</p>
+            <p className="max-w-[100px] text-[11px] font-thin">{user.bio}</p>
           )}
         </div>
       </div>
@@ -73,7 +76,7 @@ const PeopleRow = ({ user }: Props) => {
       </div>
 
       <Button
-        className="flex self-end"
+        className="flex self-center"
         onClick={chatHandler}
         id={String(user.id)}
       >

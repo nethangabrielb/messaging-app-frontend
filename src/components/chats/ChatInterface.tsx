@@ -11,7 +11,7 @@ import type { MessageInterface } from "@/types/messages";
 import type { User } from "@/types/user";
 import { socket } from "../../socket";
 
-const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
+const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
   const [messages, setMessages] = useState<
     Array<{
       message: string;
@@ -25,9 +25,9 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
   const { register, getValues, watch, resetField, handleSubmit } = useForm();
 
   const { data: chatMessages } = useQuery({
-    queryKey: [room],
+    queryKey: [roomId],
     queryFn: async () => {
-      const url = `${import.meta.env.VITE_SERVER_URL}/api/messages/${room}`;
+      const url = `${import.meta.env.VITE_SERVER_URL}/api/messages/${roomId}`;
       return fetchData(url);
     },
   });
@@ -42,18 +42,19 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
 
   useEffect(() => {
     const endUserValue = userChats?.filter((chats) => {
-      return chats.name === room;
+      return chats.id === roomId;
     });
     if (endUserValue) {
       setEndUser(endUserValue[0].users[0]);
     }
-  }, [room, userChats]);
+  }, [roomId, userChats]);
 
   useEffect(() => {
     const messageHandler = (
       message: string,
       sender: User,
-      randomId: number
+      randomId: number,
+      roomIdRecipient: number
     ) => {
       const updatedMessages = messages.map((mess) => {
         if (mess.messageId === randomId) {
@@ -69,7 +70,7 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
       });
       if (sender.id === user?.id) {
         setMessages(updatedMessages);
-      } else {
+      } else if (sender.username === endUser?.username) {
         setMessages((prev) => [
           ...prev,
           {
@@ -79,6 +80,8 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
             messageId: randomId,
           },
         ]);
+      } else {
+        socket.emit("notification", roomIdRecipient, user?.id);
       }
     };
 
@@ -87,13 +90,13 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
     return () => {
       socket.off("message", messageHandler);
     };
-  }, [messages]);
+  }, [messages, user, endUser?.username]);
 
   // join chatroom associated to room
   useEffect(() => {
-    socket.emit("join room", room);
+    socket.emit("join room", roomId);
     setMessages([]);
-  }, [room]);
+  }, [roomId]);
 
   // scroll automatically on bottom of chat when refreshing or going to chat
   useEffect(() => {
@@ -108,7 +111,7 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
     requestAnimationFrame(() => {
       messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
     });
-  }, [room, messages]);
+  }, [roomId, messages]);
 
   const sendMessage = () => {
     const message = getValues("message");
@@ -122,7 +125,7 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
       "message",
       message,
       token,
-      room,
+      roomId,
       randomId,
       (res: { success: boolean }) => {
         if (res.success) {
@@ -136,7 +139,11 @@ const ChatInterface = ({ room, user, token, userChats }: ChatRoom) => {
     <div className="flex flex-col justify-end w-full max-h-[796px]">
       <div className="flex items-center gap-2 bg-secondary p-3 rounded-tr-lg w-full top-0 mb-auto border border-b-border border-t-0 border-l-0 border-r-0">
         <img
-          src={`${import.meta.env.VITE_R2_PUBLIC_URL}/${endUser?.avatar}`}
+          src={`${
+            endUser?.avatar
+              ? `${import.meta.env.VITE_R2_PUBLIC_URL}/${endUser?.avatar}`
+              : "/default.jpg"
+          }`}
           alt="user avatar"
           className="object-cover w-[38px] h-[38px]  rounded-full"
         />
