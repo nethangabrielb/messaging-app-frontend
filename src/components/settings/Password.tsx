@@ -9,6 +9,9 @@ import clsx from "clsx";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ArrowLeft } from "lucide-react";
+import useWidth from "@/stores/widthStore";
+import { useNavigate } from "react-router-dom";
 
 const PasswordSchema = z
   .object({
@@ -48,6 +51,8 @@ const Password = () => {
   } = useForm({
     resolver: zodResolver(PasswordSchema),
   });
+  const width = useWidth((state) => state.width);
+  const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: () => {
@@ -60,12 +65,12 @@ const Password = () => {
           method: "PUT",
           headers: {
             authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token") as string
+              localStorage.getItem("token") as string,
             )}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(values),
-        }
+        },
       );
     },
     onSuccess: async (res) => {
@@ -80,7 +85,7 @@ const Password = () => {
     },
     onError: () => {
       toast.error(
-        "There is an unexpected error in the server. Please try again!"
+        "There is an unexpected error in the server. Please try again!",
       );
     },
   });
@@ -91,19 +96,31 @@ const Password = () => {
 
   return (
     <form
-      className="flex flex-col justify-start gap-4 p-4 w-full"
+      className="relative flex w-full justify-center gap-4 p-4 md:justify-start"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="w-fit flex flex-col gap-4">
+      {width < 602 && (
+        <Button
+          className="absolute top-0 right-0 m-5"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate("/settings");
+          }}
+        >
+          <ArrowLeft></ArrowLeft>
+        </Button>
+      )}
+      <div className="flex w-fit flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <Label className="font-extralight ml-1 text-sm">
+          <Label className="ml-1 text-sm font-extralight">
             Current password
           </Label>
           <Input
             type="password"
             className={clsx(
               "font-light",
-              errors.password || (serverError && "border-red-500 !ring-red-500")
+              errors.password ||
+                (serverError && "border-red-500 !ring-red-500"),
             )}
             {...register("password")}
             onChange={() => {
@@ -113,46 +130,46 @@ const Password = () => {
             }}
           ></Input>
           {errors.password && (
-            <p className="text-red-500 text-[9px] translate-y-[4px] translate-x-[4px]">
+            <p className="translate-x-[4px] translate-y-[4px] text-[9px] text-red-500">
               {errors.password.message}
             </p>
           )}
           {serverError && (
-            <p className="text-red-500 text-[9px] translate-y-[4px] translate-x-[4px]">
+            <p className="translate-x-[4px] translate-y-[4px] text-[9px] text-red-500">
               {serverError}
             </p>
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <Label className="font-extralight ml-1 text-sm">New Password</Label>
+          <Label className="ml-1 text-sm font-extralight">New Password</Label>
           <Input
             type="password"
             className={clsx(
               "font-light",
-              errors.newPassword && "border-red-500 !ring-red-500"
+              errors.newPassword && "border-red-500 !ring-red-500",
             )}
             {...register("newPassword")}
           ></Input>
           {errors.newPassword && (
-            <p className="text-red-500 text-[9px] translate-y-[4px] translate-x-[4px]">
+            <p className="translate-x-[4px] translate-y-[4px] text-[9px] text-red-500">
               {errors.newPassword.message}
             </p>
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <Label className="font-extralight ml-1 text-sm">
+          <Label className="ml-1 text-sm font-extralight">
             Confirm new password
           </Label>
           <Input
             type="password"
             className={clsx(
               "font-light",
-              errors.confirmNewPassword && "border-red-500 !ring-red-500"
+              errors.confirmNewPassword && "border-red-500 !ring-red-500",
             )}
             {...register("confirmNewPassword")}
           ></Input>
           {errors.confirmNewPassword && (
-            <p className="text-red-500 text-[9px] translate-y-[4px] translate-x-[4px]">
+            <p className="translate-x-[4px] translate-y-[4px] text-[9px] text-red-500">
               {errors.confirmNewPassword.message}
             </p>
           )}

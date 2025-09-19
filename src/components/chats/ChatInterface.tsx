@@ -161,7 +161,7 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
             </p>
           </div>
         </div>
-        {width < 466 && (
+        {width < 602 && (
           <Button className="ml-auto" onClick={() => navigate("/chat")}>
             <ArrowLeft></ArrowLeft>
           </Button>

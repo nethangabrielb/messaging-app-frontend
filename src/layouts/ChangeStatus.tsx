@@ -29,13 +29,13 @@ const ChangeStatus = ({ user, refetch }: Props) => {
 
   switch (status) {
     case "ONLINE":
-      placeholder = width < 466 ? "🟢" : "🟢 Online";
+      placeholder = width < 602 ? "🟢" : "🟢 Online";
       break;
     case "OFFLINE":
-      placeholder = width < 466 ? "⚫" : "⚫ Offline";
+      placeholder = width < 602 ? "⚫" : "⚫ Offline";
       break;
     case "BUSY":
-      placeholder = width < 466 ? "🔴" : "🔴 Busy";
+      placeholder = width < 602 ? "🔴" : "🔴 Busy";
       break;
   }
 

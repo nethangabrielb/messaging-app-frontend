@@ -27,7 +27,7 @@ const Chats = () => {
   useEffect(() => {
     if (userChats?.data.length >= 1) {
       if (!roomId && width) {
-        if (width > 466) {
+        if (width > 602) {
           navigate(`/chat/${userChats?.data[0].id}`);
         }
       }
@@ -83,7 +83,7 @@ const Chats = () => {
 
   return (
     <main className="border-border bg-card row-start-2 flex max-h-full rounded-sm border lg:col-start-2 lg:col-end-3">
-      {width && width < 466 ? (
+      {width && width < 602 ? (
         <>
           {roomId ? (
             <ChatInterface

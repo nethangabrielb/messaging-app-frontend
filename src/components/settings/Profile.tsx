@@ -3,7 +3,7 @@ import { Label } from "@radix-ui/react-label";
 import useUser from "@/hooks/useUser";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
+import { Pencil, ArrowLeft } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import { useForm } from "react-hook-form";
@@ -11,6 +11,8 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
+import useWidth from "@/stores/widthStore";
+import { useNavigate } from "react-router-dom";
 
 const ProfileSchema = z.object({
   username: z
@@ -42,6 +44,8 @@ const Profile = () => {
   const [filePreview, setFilePreview] = useState<File | null>(null);
   const editAvatarBtn = useRef<SVGSVGElement | null>(null);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
+  const width = useWidth((state) => state.width);
+  const navigate = useNavigate();
   const {
     getValues,
     setValue,
@@ -116,14 +120,23 @@ const Profile = () => {
 
   return (
     <form
-      className="flex w-fit flex-col-reverse items-center justify-end gap-4 p-4 text-center md:flex-row md:items-start md:justify-around md:text-start"
+      className="relative flex w-full flex-col-reverse items-center justify-end gap-4 p-4 md:flex-row md:items-start md:justify-around"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex w-full flex-col items-center gap-4 md:items-start">
-        <div className="flex flex-col gap-1">
-          <Label className="ml-1 text-center text-sm font-extralight">
-            Username
-          </Label>
+      {width < 602 && (
+        <Button
+          className="absolute top-0 right-0 m-5"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate("/settings");
+          }}
+        >
+          <ArrowLeft></ArrowLeft>
+        </Button>
+      )}
+      <div className="flex w-full flex-col items-center gap-4 text-center md:text-start">
+        <div className="flex w-[80%] flex-col gap-1 sm:w-full">
+          <Label className="ml-1 text-sm font-extralight">Username</Label>
           <Input className="font-light" {...register("username")}></Input>
           {errors.username && (
             <p className="translate-x-[4px] translate-y-[4px] text-[9px] text-red-500">
@@ -131,7 +144,7 @@ const Profile = () => {
             </p>
           )}
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex w-[80%] flex-col gap-1 sm:w-full">
           <Label className="ml-1 text-sm font-extralight">Email</Label>
           <Input className="font-light" {...register("email")}></Input>
           {errors.email && (
@@ -140,7 +153,7 @@ const Profile = () => {
             </p>
           )}
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex w-[80%] flex-col gap-1 sm:w-full">
           <Label className="ml-1 text-sm font-extralight">Bio</Label>
           <Textarea
             className="w-full font-light"

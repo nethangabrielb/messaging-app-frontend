@@ -9,10 +9,10 @@ const Navigation = () => {
   return (
     <NavigationMenu>
       <NavigationMenuList>
-        <NavigationMenuLink className="cursor-pointer select-none">
+        <NavigationMenuLink className="cursor-pointer select-none" asChild>
           <Link to="/chat">Chats</Link>
         </NavigationMenuLink>
-        <NavigationMenuLink className="cursor-pointer select-none">
+        <NavigationMenuLink className="cursor-pointer select-none" asChild>
           <Link to="/people">People</Link>
         </NavigationMenuLink>
       </NavigationMenuList>
