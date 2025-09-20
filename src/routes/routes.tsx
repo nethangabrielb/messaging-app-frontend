@@ -8,11 +8,13 @@ import Chats from "@/pages/authenticated/Chats";
 import AccountSettings from "@/pages/authenticated/Settings";
 import Profile from "@/components/settings/Profile";
 import Password from "@/components/settings/Password";
+import { ErrorPage } from "@/pages/errors/Error";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <LoginPage></LoginPage>,
+    errorElement: <ErrorPage></ErrorPage>,
   },
   {
     path: "/chat",
