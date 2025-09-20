@@ -17,7 +17,7 @@ interface ChatOverview {
       id: number;
       username: string;
       avatar: string;
-    }
+    },
   ];
   Notification: Array<Notification>;
 }
@@ -48,6 +48,7 @@ type ChatRoom = {
   user: User;
   token: string;
   userChats: Array<UserChats>;
+  isPending: boolean;
 };
 
 export type { ChatOverview, Chat, ChatRoom, UserChats, EndUser };

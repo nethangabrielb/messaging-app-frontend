@@ -8,6 +8,7 @@ import ChatInterface from "@/components/chats/ChatInterface";
 import useUser from "@/hooks/useUser";
 import { socket } from "../../socket";
 import useWidth from "@/stores/widthStore";
+import { ChatRowSkeleton } from "@/components/chats/ChatRowSkeleton";
 
 const Chats = () => {
   const { roomId } = useParams();
@@ -16,7 +17,11 @@ const Chats = () => {
   const token = JSON.parse(localStorage.getItem("token") as string);
   const width = useWidth((state) => state.width);
 
-  const { data: userChats, refetch } = useQuery({
+  const {
+    data: userChats,
+    refetch,
+    isPending,
+  } = useQuery({
     queryKey: ["chats"],
     queryFn: async () => {
       const url = `${import.meta.env.VITE_SERVER_URL}/api/chats`;
@@ -89,10 +94,34 @@ const Chats = () => {
               user={user?.data[0]}
               token={token}
               userChats={userChats?.data}
+              isPending={isPending}
             ></ChatInterface>
           ) : (
             <aside className="border-r-border flex w-full flex-col gap-2 border-r p-2 sm:w-[250px]">
-              {userChats?.data?.map((chat: ChatOverview) => {
+              {isPending ? (
+                <ChatRowSkeleton></ChatRowSkeleton>
+              ) : (
+                userChats?.data?.map((chat: ChatOverview) => {
+                  return (
+                    <ChatRow
+                      key={chat.id}
+                      chat={chat}
+                      roomId={Number(roomId)}
+                      user={user?.data[0]}
+                    ></ChatRow>
+                  );
+                })
+              )}
+            </aside>
+          )}
+        </>
+      ) : (
+        <>
+          <aside className="border-r-border flex w-full flex-col gap-2 border-r p-2 sm:w-[250px]">
+            {isPending ? (
+              <ChatRowSkeleton></ChatRowSkeleton>
+            ) : (
+              userChats?.data?.map((chat: ChatOverview) => {
                 return (
                   <ChatRow
                     key={chat.id}
@@ -101,23 +130,8 @@ const Chats = () => {
                     user={user?.data[0]}
                   ></ChatRow>
                 );
-              })}
-            </aside>
-          )}
-        </>
-      ) : (
-        <>
-          <aside className="border-r-border flex w-full flex-col gap-2 border-r p-2 sm:w-[250px]">
-            {userChats?.data?.map((chat: ChatOverview) => {
-              return (
-                <ChatRow
-                  key={chat.id}
-                  chat={chat}
-                  roomId={Number(roomId)}
-                  user={user?.data[0]}
-                ></ChatRow>
-              );
-            })}
+              })
+            )}
           </aside>
           {roomId && (
             <ChatInterface
@@ -125,6 +139,7 @@ const Chats = () => {
               user={user?.data[0]}
               token={token}
               userChats={userChats?.data}
+              isPending={isPending}
             ></ChatInterface>
           )}
         </>

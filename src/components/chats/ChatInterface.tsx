@@ -13,8 +13,16 @@ import useWidth from "@/stores/widthStore";
 import { ArrowLeft, SendHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { ChatHeaderSkeleton } from "@/components/chats/ChatRowSkeleton";
+import { MessagesSkeleton } from "@/components/chats/MessagesSkeleton";
 
-const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
+const ChatInterface = ({
+  roomId,
+  user,
+  token,
+  userChats,
+  isPending,
+}: ChatRoom) => {
   const [messages, setMessages] = useState<
     Array<{
       message: string;
@@ -29,7 +37,7 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
   const navigate = useNavigate();
   const { register, getValues, watch, resetField, handleSubmit } = useForm();
 
-  const { data: chatMessages } = useQuery({
+  const { data: chatMessages, isPending: chatPending } = useQuery({
     queryKey: [roomId],
     queryFn: async () => {
       const url = `${import.meta.env.VITE_SERVER_URL}/api/messages/${roomId}`;
@@ -105,12 +113,12 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
 
   // scroll automatically on bottom of chat when refreshing or going to chat
   useEffect(() => {
-    window.addEventListener("load", () => {
+    if (!isPending) {
       setTimeout(() => {
         messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    });
-  }, []);
+      }, 200);
+    }
+  }, [isPending]);
 
   useEffect(() => {
     requestAnimationFrame(() => {
@@ -143,24 +151,30 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
   return (
     <div className="flex max-h-[796px] w-full flex-col justify-end">
       <div className="bg-secondary border-b-border top-0 mb-auto flex w-full items-center gap-2 rounded-tr-lg border border-t-0 border-r-0 border-l-0 p-3">
-        <img
-          src={`${
-            endUser?.avatar
-              ? `${import.meta.env.VITE_R2_PUBLIC_URL}/${endUser?.avatar}`
-              : "/default.jpg"
-          }`}
-          alt="user avatar"
-          className="h-[38px] w-[38px] rounded-full object-cover"
-        />
-        <div className="flex flex-col gap-1">
-          <p className="text-[16px] font-light">{endUser?.username}</p>
-          <div className="flex items-center gap-1">
-            <div className={statusClasses}></div>
-            <p className="text-xs font-thin">
-              {!endUser?.status ? "OFFLINE" : endUser?.status}
-            </p>
-          </div>
-        </div>
+        {isPending ? (
+          <ChatHeaderSkeleton></ChatHeaderSkeleton>
+        ) : (
+          <>
+            <img
+              src={`${
+                endUser?.avatar
+                  ? `${import.meta.env.VITE_R2_PUBLIC_URL}/${endUser?.avatar}`
+                  : "/default.jpg"
+              }`}
+              alt="user avatar"
+              className="h-[38px] w-[38px] rounded-full object-cover"
+            />
+            <div className="flex flex-col gap-1">
+              <p className="text-[16px] font-light">{endUser?.username}</p>
+              <div className="flex items-center gap-1">
+                <div className={statusClasses}></div>
+                <p className="text-xs font-thin">
+                  {!endUser?.status ? "OFFLINE" : endUser?.status}
+                </p>
+              </div>
+            </div>
+          </>
+        )}
         {width < 602 && (
           <Button className="ml-auto" onClick={() => navigate("/chat")}>
             <ArrowLeft></ArrowLeft>
@@ -169,15 +183,19 @@ const ChatInterface = ({ roomId, user, token, userChats }: ChatRoom) => {
       </div>
       <div className="mt-2 flex flex-col items-end gap-2 overflow-y-auto px-4 sm:px-4 lg:px-10 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-600 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-transparent">
         {/* Render backend chat history here */}
-        {chatMessages?.data.map((message: MessageInterface) => {
-          return (
-            <Message
-              message={message}
-              userId={user?.id}
-              key={crypto.randomUUID()}
-            ></Message>
-          );
-        })}
+        {chatPending ? (
+          <MessagesSkeleton></MessagesSkeleton>
+        ) : (
+          chatMessages?.data.map((message: MessageInterface) => {
+            return (
+              <Message
+                message={message}
+                userId={user?.id}
+                key={crypto.randomUUID()}
+              ></Message>
+            );
+          })
+        )}
 
         {/* 
           Render newly sent messages here and the reason why
