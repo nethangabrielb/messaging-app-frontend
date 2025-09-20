@@ -12,7 +12,7 @@ const ChatRow = ({ chat, roomId, user }: Chat) => {
   return (
     <button
       className={clsx(
-        "flex-start hover:bg-secondary flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg p-4 transition duration-100",
+        "flex-start hover:bg-secondary border-border flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg border p-4 transition duration-100 sm:border-none",
         chat.id === roomId ? "bg-secondary" : "",
       )}
       onClick={openChatHandler}
