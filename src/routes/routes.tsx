@@ -24,6 +24,7 @@ const router = createBrowserRouter([
         <Chats></Chats>
       </Layout>
     ),
+    errorElement: <ErrorPage></ErrorPage>,
   },
   {
     path: "/chat/:roomId",
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
         <Chats></Chats>
       </Layout>
     ),
+    errorElement: <ErrorPage></ErrorPage>,
   },
   {
     path: "/people",
@@ -42,6 +44,7 @@ const router = createBrowserRouter([
         <People></People>
       </Layout>
     ),
+    errorElement: <ErrorPage></ErrorPage>,
   },
   {
     path: "/settings",
@@ -51,14 +54,17 @@ const router = createBrowserRouter([
         <AccountSettings></AccountSettings>
       </Layout>
     ),
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "profile",
         element: <Profile></Profile>,
+        errorElement: <ErrorPage></ErrorPage>,
       },
       {
         path: "account",
         element: <Password></Password>,
+        errorElement: <ErrorPage></ErrorPage>,
       },
     ],
   },
