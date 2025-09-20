@@ -64,8 +64,6 @@ const Chats = () => {
       });
     };
 
-    console.log(width);
-
     const clearNotificationsHandler = (success: boolean) => {
       if (success) {
         refetch();
