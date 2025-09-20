@@ -28,12 +28,16 @@ const Layout = ({ children }: ReactProps) => {
   }, [refetchUser]);
 
   useEffect(() => {
-    window.addEventListener("load", () => {
+    const changeWidthHandler = () => {
       updateWidth(window.innerWidth);
-    });
-    window.addEventListener("resize", () => {
-      updateWidth(window.innerWidth);
-    });
+    };
+    window.addEventListener("load", changeWidthHandler);
+    window.addEventListener("resize", changeWidthHandler);
+
+    return () => {
+      window.removeEventListener("load", changeWidthHandler);
+      window.removeEventListener("resize", changeWidthHandler);
+    };
   }, [updateWidth]);
 
   const logoutHandler = (e: React.MouseEvent<HTMLDivElement>) => {

@@ -1,12 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { MessageCircle } from "lucide-react";
 
 import { LoginForm } from "@/components/forms/LoginForm";
 import { RegisterForm } from "@/components/forms/RegisterForm";
+import useWidth from "@/stores/widthStore";
 
 export default function LoginPage() {
   const [form, setForm] = useState<"login" | "register">("login");
+  const updateWidth = useWidth((state) => state.updateWidth);
+
+  useEffect(() => {
+    const changeWidthHandler = () => {
+      updateWidth(window.innerWidth);
+    };
+    window.addEventListener("load", changeWidthHandler);
+    window.addEventListener("resize", changeWidthHandler);
+
+    return () => {
+      window.removeEventListener("load", changeWidthHandler);
+      window.removeEventListener("resize", changeWidthHandler);
+    };
+  }, [updateWidth]);
 
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
