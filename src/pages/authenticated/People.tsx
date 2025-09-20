@@ -5,13 +5,14 @@ import type { User } from "@/types/user";
 import PeopleRow from "@/components/people/PeopleRow";
 import { socket } from "../../socket";
 import { SelectPeople } from "@/components/people/SelectFilterPeople";
+import { PeoplRowSkeleton } from "@/components/people/PeopleRowSkeleton";
 
 const People = () => {
   const [statusFilter, setStatusFilter] = useState<null | string>(null);
   const [search, setSearch] = useState<null | string>(null);
 
   // Upon mounting component, query all people
-  const { data, refetch } = useQuery({
+  const { data, refetch, isPending } = useQuery({
     queryKey: ["users", statusFilter, search],
     queryFn: async () => {
       const token = JSON.parse(localStorage.getItem("token") as string);
@@ -55,9 +56,13 @@ const People = () => {
       </div>
 
       {/* A list of users should be here */}
-      {data?.data.map((user: User) => {
-        return <PeopleRow key={user.id} user={user}></PeopleRow>;
-      })}
+      {isPending ? (
+        <PeoplRowSkeleton></PeoplRowSkeleton>
+      ) : (
+        data?.data.map((user: User) => {
+          return <PeopleRow key={user.id} user={user}></PeopleRow>;
+        })
+      )}
     </main>
   );
 };
