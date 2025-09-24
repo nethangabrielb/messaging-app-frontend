@@ -22,7 +22,7 @@ const Chats = () => {
     refetch,
     isPending,
   } = useQuery({
-    queryKey: ["chats"],
+    queryKey: ["chats", roomId],
     queryFn: async () => {
       const url = `${import.meta.env.VITE_SERVER_URL}/api/chats`;
       return fetchData(url);
