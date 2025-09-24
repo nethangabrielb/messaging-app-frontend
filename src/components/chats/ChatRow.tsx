@@ -21,7 +21,7 @@ const ChatRow = ({ chat, roomId, user }: Chat) => {
         <img
           src={`${
             chat?.users[0]?.avatar
-              ? `${import.meta.env.VITE_R2_PUBLIC_URL}/${
+              ? `${import.meta.env.VITE_SUPABASE_PUBLIC_URL}/${
                   chat?.users[0]?.avatar
                 }`
               : "/default.jpg"

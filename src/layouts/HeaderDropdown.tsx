@@ -24,19 +24,19 @@ export function HeaderDropdown({ user, logoutHandler }: Props) {
     user?.status === "OFFLINE" && "bg-neutral-500",
     user?.status === "ONLINE" && "bg-green-500",
     user?.status === "BUSY" && "bg-red-500",
-    user?.status === null && "bg-neutral-500"
+    user?.status === null && "bg-neutral-500",
   );
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         asChild
-        className="h-[34px] w-[34px] rounded-full cursor-pointer select-none object-cover"
+        className="h-[34px] w-[34px] cursor-pointer rounded-full object-cover select-none"
       >
         <img
           src={`${
             user?.avatar
-              ? `${import.meta.env.VITE_R2_PUBLIC_URL}/${user?.avatar}`
+              ? `${import.meta.env.VITE_SUPABASE_PUBLIC_URL}/${user?.avatar}`
               : "/default.jpg"
           }`}
           alt="user avatar"

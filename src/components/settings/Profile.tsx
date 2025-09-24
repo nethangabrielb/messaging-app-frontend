@@ -83,11 +83,11 @@ const Profile = () => {
       );
     },
     onSuccess: async (res) => {
+      const data = await res.json();
       if (res.ok) {
-        const data = await res.json();
         toast.success(data.message);
       } else {
-        toast.error("Something went wrong. Please try again!");
+        toast.error(data.message);
       }
     },
   });
@@ -180,7 +180,7 @@ const Profile = () => {
               filePreview
                 ? URL.createObjectURL(filePreview)
                 : user?.data[0].avatar
-                  ? `${import.meta.env.VITE_R2_PUBLIC_URL}/${
+                  ? `${import.meta.env.VITE_SUPABASE_PUBLIC_URL}/${
                       user?.data[0].avatar
                     }`
                   : "default.jpg"

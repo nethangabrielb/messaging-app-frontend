@@ -158,7 +158,7 @@ const ChatInterface = ({
             <img
               src={`${
                 endUser?.avatar
-                  ? `${import.meta.env.VITE_R2_PUBLIC_URL}/${endUser?.avatar}`
+                  ? `${import.meta.env.VITE_SUPABASE_PUBLIC_URL}/${endUser?.avatar}`
                   : "/default.jpg"
               }`}
               alt="user avatar"

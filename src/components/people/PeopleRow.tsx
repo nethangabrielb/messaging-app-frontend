@@ -52,7 +52,7 @@ const PeopleRow = ({ user }: Props) => {
         <img
           src={`${
             user.avatar
-              ? `${import.meta.env.VITE_R2_PUBLIC_URL}/${user.avatar}`
+              ? `${import.meta.env.VITE_SUPABASE_PUBLIC_URL}/${user.avatar}`
               : "/default.jpg"
           }`}
           alt="user avatar"
