@@ -105,7 +105,7 @@ const Profile = () => {
 
   const uploadAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      if (e.target.files[0].size <= 2097152) {
+      if (e.target.files[0].size <= 3 * 1024 * 1024) {
         setValue("file", e.target.files[0], { shouldValidate: true });
         setFilePreview(e.target.files[0]);
       } else {
