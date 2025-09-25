@@ -183,7 +183,7 @@ const Profile = () => {
                   ? `${import.meta.env.VITE_SUPABASE_PUBLIC_URL}/${
                       user?.data[0].avatar
                     }`
-                  : "default.jpg"
+                  : "/default.jpg"
             }`}
             alt="user avatar"
             className="h-[100px] w-[100px] rounded-full object-cover md:h-[150px] md:w-[150px]"
