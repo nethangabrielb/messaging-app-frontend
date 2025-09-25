@@ -30,7 +30,7 @@ type RegisterDetails = z.infer<typeof RegistrationSchema>;
 export function RegisterForm({ ...props }: Readonly<FormProps>) {
   const [emailServerErr, setEmailServerErr] = useState<string | null>(null);
   const [usernameServerErr, setUsernameServerErr] = useState<string | null>(
-    null
+    null,
   );
 
   const {
@@ -73,7 +73,7 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
     },
     onError: () => {
       toast.error(
-        "There was an error registering your account. Please try again"
+        "There was an error registering your account. Please try again",
       );
     },
   });
@@ -96,12 +96,12 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
           <div className="flex justify-between">
             <Label htmlFor="email">Email</Label>
             {errors.email && (
-              <p className="text-red-500 text-[9px] translate-y-[4px]">
+              <p className="translate-y-[4px] text-[9px] text-red-500">
                 Email can't be empty
               </p>
             )}
             {emailServerErr && (
-              <p className="text-red-500 text-[9px] translate-y-[4px]">
+              <p className="translate-y-[4px] text-[9px] text-red-500">
                 {emailServerErr}
               </p>
             )}
@@ -113,7 +113,8 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
             placeholder="m@example.com"
             required
             className={clsx(
-              errors.email || (emailServerErr && "border-red-500 !ring-red-500")
+              errors.email ||
+                (emailServerErr && "border-red-500 !ring-red-500"),
             )}
             onChange={() => {
               if (emailServerErr) {
@@ -126,12 +127,12 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
           <div className="flex justify-between">
             <Label htmlFor="username">Username</Label>
             {errors.username && (
-              <p className="text-red-500 text-[9px] translate-y-[4px]">
+              <p className="translate-y-[4px] text-[9px] text-red-500">
                 Username can't be empty
               </p>
             )}
             {usernameServerErr && (
-              <p className="text-red-500 text-[9px] translate-y-[4px]">
+              <p className="translate-y-[4px] text-[9px] text-red-500">
                 {usernameServerErr}
               </p>
             )}
@@ -143,7 +144,7 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
             required
             className={clsx(
               errors.username ||
-                (usernameServerErr && "border-red-500 !ring-red-500")
+                (usernameServerErr && "border-red-500 !ring-red-500"),
             )}
             onChange={() => {
               if (usernameServerErr) {
@@ -156,7 +157,7 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
           <div className="flex justify-between">
             <Label htmlFor="password">Password</Label>
             {errors.password && (
-              <p className="text-red-500 text-[9px] translate-y-[4px]">
+              <p className="translate-y-[4px] text-[9px] text-red-500">
                 Passwords must be at least 8 characters
               </p>
             )}
@@ -175,7 +176,7 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
               Confirm Password
             </Label>
             {errors.confirmPassword && (
-              <p className="text-red-500 text-[9px] translate-y-[4px]">
+              <p className="translate-y-[4px] text-[9px] text-red-500">
                 {errors.confirmPassword.type === "custom"
                   ? errors.confirmPassword.message
                   : "Passwords must be at least 8 characters"}
@@ -188,7 +189,7 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
             type="password"
             required
             className={clsx(
-              errors.confirmPassword && "border-red-500 !ring-red-500"
+              errors.confirmPassword && "border-red-500 !ring-red-500",
             )}
           />
         </div>
@@ -199,7 +200,7 @@ export function RegisterForm({ ...props }: Readonly<FormProps>) {
       <div className="text-center text-sm">
         Already have an account?{" "}
         <button
-          className="underline underline-offset-4 cursor-pointer"
+          className="cursor-pointer underline underline-offset-4"
           onClick={() => {
             props.setForm("login");
             reset();
