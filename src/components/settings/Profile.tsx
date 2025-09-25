@@ -162,7 +162,7 @@ const Profile = () => {
         </div>
         <Button
           className="w-fit"
-          disabled={(errors.username && true) || mutator.isPending}
+          disabled={!!errors.username || mutator.isPending}
         >
           Update profile
         </Button>
