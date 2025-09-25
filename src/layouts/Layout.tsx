@@ -8,13 +8,11 @@ import useUser from "@/hooks/useUser";
 import { HeaderDropdown } from "@/layouts/HeaderDropdown";
 import ChangeStatus from "@/layouts/ChangeStatus";
 import Navigation from "@/layouts/Navigation";
-import useWidth from "@/stores/widthStore";
 
 const Layout = ({ children }: ReactProps) => {
   const navigate = useNavigate();
   const { user, refetchUser } = useUser();
   const token = JSON.parse(localStorage.getItem("token") as string);
-  const updateWidth = useWidth((state) => state.updateWidth);
 
   useEffect(() => {
     const isAuthenticated = protectedLoader();
@@ -26,19 +24,6 @@ const Layout = ({ children }: ReactProps) => {
       }
     });
   }, [refetchUser]);
-
-  useEffect(() => {
-    const changeWidthHandler = () => {
-      updateWidth(window.innerWidth);
-    };
-    window.addEventListener("load", changeWidthHandler);
-    window.addEventListener("resize", changeWidthHandler);
-
-    return () => {
-      window.removeEventListener("load", changeWidthHandler);
-      window.removeEventListener("resize", changeWidthHandler);
-    };
-  }, [updateWidth]);
 
   const logoutHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
