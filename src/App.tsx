@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import BackendLoading from "@/components/BackendLoading";
 import useWidth from "@/stores/widthStore";
 import { useEffect } from "react";
+import { socket } from "@/socket";
 
 function App() {
   const updateWidth = useWidth((state) => state.updateWidth);
@@ -21,6 +22,9 @@ function App() {
     const changeWidthHandler = () => {
       updateWidth(window.innerWidth);
     };
+
+    changeWidthHandler();
+
     window.addEventListener("load", changeWidthHandler);
     window.addEventListener("resize", changeWidthHandler);
 
@@ -28,7 +32,14 @@ function App() {
       window.removeEventListener("load", changeWidthHandler);
       window.removeEventListener("resize", changeWidthHandler);
     };
-  }, [updateWidth]);
+  }, [updateWidth, isPending]);
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("token") as string);
+    if (token) {
+      socket.connect();
+    }
+  }, []);
 
   return isPending ? (
     <BackendLoading></BackendLoading>
