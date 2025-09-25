@@ -54,11 +54,13 @@ const Profile = () => {
     formState: { errors },
   } = useForm<Profile>({
     defaultValues: {
-      username: user?.data[0]?.username,
-      bio: user?.data[0]?.bio,
+      username: user?.data[0]?.username ?? "",
+      bio: user?.data[0]?.bio ?? "",
+      email: user?.data[0]?.email ?? "",
       file: undefined,
     },
     resolver: zodResolver(ProfileSchema),
+    mode: "onChange",
   });
   const mutator = useMutation({
     mutationFn: () => {
