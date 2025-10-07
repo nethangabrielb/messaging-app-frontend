@@ -27,6 +27,9 @@ const Chats = () => {
       const url = `${import.meta.env.VITE_SERVER_URL}/api/chats`;
       return fetchData(url);
     },
+    staleTime: 30000,
+    refetchOnWindowFocus: false,
+    retry: 1,
   });
 
   useEffect(() => {
