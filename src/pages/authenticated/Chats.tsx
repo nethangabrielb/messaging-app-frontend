@@ -97,7 +97,7 @@ const Chats = () => {
               isPending={isPending}
             ></ChatInterface>
           ) : (
-            <aside className="border-r-border flex w-full flex-col gap-2 border-r p-2 sm:w-[250px]">
+            <aside className="border-r-border flex w-full flex-col gap-2 overflow-y-auto border-r p-2 sm:w-[250px] max-h-[796px] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-600 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-transparent">
               {isPending ? (
                 <ChatRowSkeleton></ChatRowSkeleton>
               ) : (
@@ -117,7 +117,7 @@ const Chats = () => {
         </>
       ) : (
         <>
-          <aside className="border-r-border flex w-full flex-col gap-2 border-r p-2 sm:w-[250px]">
+          <aside className="border-r-border flex w-full flex-col gap-2 overflow-y-auto border-r p-2 sm:w-[250px] max-h-[796px] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-600 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-transparent">
             {isPending ? (
               <ChatRowSkeleton></ChatRowSkeleton>
             ) : (
