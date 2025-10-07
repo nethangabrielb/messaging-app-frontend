@@ -32,9 +32,12 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
     reset,
     handleSubmit,
     getValues,
-    formState: { errors },
+    formState: { errors, touchedFields, isSubmitted },
   } = useForm<LoginDetails>({
     resolver: zodResolver(LoginSchema),
+    mode: "onSubmit",
+    reValidateMode: "onChange",
+    defaultValues: { email: "", password: "" },
   });
 
   const mutation = useMutation({
@@ -91,7 +94,7 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
         <div className="grid gap-3">
           <div className="flex justify-between">
             <Label htmlFor="email">Email</Label>
-            {errors.email && (
+            {errors.email && (touchedFields.email || isSubmitted) && (
               <p className="translate-y-[4px] text-[9px] text-red-500">
                 Email can't be empty
               </p>
@@ -124,7 +127,7 @@ export function LoginForm({ ...props }: Readonly<FormProps>) {
         <div className="grid gap-3">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
-            {errors.password && (
+            {errors.password && (touchedFields.password || isSubmitted) && (
               <p className="translate-y-[4px] text-[9px] text-red-500">
                 Password must be at least 8 characters
               </p>
